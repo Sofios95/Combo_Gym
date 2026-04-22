@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  # 1. Η βάση δεδομένων (PostgreSQL)
+  db:
+    image: postgres:15
+    container_name: combo_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: yourpassword
+      POSTGRES_DB: combo_gym
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # 2. Το Redis για το "Sunday 12:00" rush
+  redis:
+    image: redis:7-alpine
+    container_name: combo_redis
+    ports:
+      - "6379:6379"
+
+  # 3. Το Backend (Node.js/Express)
+  backend:
+    build: ./Backend
+    container_name: combo_backend
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./Backend:/app
+      - /app/node_modules
+    depends_on:
+      - db
+      - redis
+    # Σύνδεση με το αρχείο .env για να διαβάζει JWT_SECRET, DB_USER κλπ.
+    env_file:
+      - ./Backend/.env
+    environment:
+      - DB_HOST=db
+      - REDIS_URL=redis://redis:6379
+      - TZ=Europe/Athens
+
+volumes:
+  postgres_data:
