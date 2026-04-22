@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Box, Container, Typography, Grid, Paper, Button, CircularProgress } from '@mui/material';
-import { EventAvailable } from '@mui/icons-material';
+// ΔΙΟΡΘΩΣΗ: Αφαιρέθηκε το EventAvailable που δεν χρησιμοποιούνταν
 import api from '../api/axiosConfig';
 import { useAuth } from '../context/AuthContext';
 
@@ -16,8 +16,6 @@ const days = ["ΔΕΥΤΕΡΑ", "ΤΡΙΤΗ", "ΤΕΤΑΡΤΗ", "ΠΕΜΠΤΗ", 
 const Booking = () => {
   const [slots, setSlots] = useState<Slot[]>([]);
   const [fetching, setFetching] = useState(true);
-  
-  // ΠΡΟΣΘΗΚΗ: State για να ξέρουμε ποιο slot "φορτώνει"
   const [processingId, setProcessingId] = useState<number | null>(null);
   
   const { tokens: userTokens, refreshTokens, loading: authLoading } = useAuth();
@@ -39,9 +37,7 @@ const Booking = () => {
     fetchData();
   }, [fetchData]);
 
-  // Διαδικασία Κράτησης
   const handleBooking = async (slotId: number) => {
-    // 1. Έλεγχος αν ήδη επεξεργαζόμαστε κάτι
     if (processingId) return;
 
     if (userTokens <= 0) {
@@ -50,19 +46,14 @@ const Booking = () => {
     }
 
     try {
-      // 2. "Κλειδώνουμε" το UI για το συγκεκριμένο slot
       setProcessingId(slotId);
-      
       const response = await api.post(`/bookings/reserve/${slotId}`);
       alert(response.data.message || "🎯 Η κράτηση ολοκληρώθηκε!");
-      
-      // 3. Ανανέωση των δεδομένων
       await fetchData();
     } catch (err: any) {
       const errorMsg = err.response?.data?.message || "⚠️ Η κράτηση απέτυχε. Δοκιμάστε ξανά.";
       alert(errorMsg);
     } finally {
-      // 4. "Ξεκλειδώνουμε" το UI
       setProcessingId(null);
     }
   };
@@ -100,7 +91,7 @@ const Booking = () => {
             p: 3, 
             bgcolor: '#111', 
             border: '2px solid #d32f2f', 
-            borderRadius: '0px', // Πιο raw/industrial look
+            borderRadius: '0px', 
             textAlign: 'center',
             boxShadow: '0 0 20px rgba(211, 47, 47, 0.2)'
           }}>
@@ -116,7 +107,8 @@ const Booking = () => {
         {/* Schedule Grid */}
         <Grid container spacing={2}>
           {days.map((day) => (
-            <Grid item xs={12} md={2.4} key={day}>
+            /* ΔΙΟΡΘΩΣΗ: Χρήση size αντί για item/xs/md για MUI v6 συμβατότητα */
+            <Grid key={day} size={{ xs: 12, md: 2.4 }}>
               <Typography variant="h6" align="center" sx={{ mb: 3, fontWeight: 900, color: '#d32f2f', textTransform: 'uppercase', letterSpacing: 1 }}>
                 {day}
               </Typography>
@@ -134,7 +126,7 @@ const Booking = () => {
                       bgcolor: isFull ? '#050505' : '#111',
                       border: isFull ? '1px solid #222' : '1px solid #1a1a1a',
                       textAlign: 'center',
-                      borderRadius: '0px', // Ταίριασμα με το industrial style
+                      borderRadius: '0px',
                       transition: 'all 0.2s ease-in-out',
                       '&:hover': !isFull && !isProcessing && { 
                         borderColor: '#d32f2f', 
@@ -152,7 +144,7 @@ const Booking = () => {
                     
                     <Button 
                       variant="contained" 
-                      disabled={isFull || userTokens <= 0 || isProcessing}
+                      disabled={isFull || (userTokens !== undefined && userTokens <= 0) || isProcessing}
                       onClick={() => handleBooking(slot.id)}
                       fullWidth
                       sx={{ 
