@@ -1,4 +1,4 @@
-import { Box, Typography, Container, Paper, Grid } from '@mui/material';
+import { Box, Typography, Container, Paper, Grid } from '@mui/material'; 
 import TrophyIcon from '@mui/icons-material/EmojiEvents';
 import HistoryIcon from '@mui/icons-material/History';
 
@@ -17,8 +17,8 @@ const CoachProfile = () => {
 
         <Grid container spacing={4}>
           {/* Αριστερή Στήλη: Σταδιοδρομία (Timeline) */}
-          {/* Χρησιμοποιούμε τα κλασικά props xs, md που είναι safe για κάθε έκδοση */}
-          <Grid item xs={12} md={7}>
+          {/* ΔΙΟΡΘΩΣΗ: Αφαιρούμε το 'item' και βάζουμε το 'size' */}
+          <Grid size={{ xs: 12, md: 7 }}>
             <Paper sx={{ p: 4, bgcolor: 'background.paper', borderRadius: 2 }}>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
                 <HistoryIcon sx={{ color: 'primary.main', mr: 2 }} />
@@ -39,7 +39,7 @@ const CoachProfile = () => {
           </Grid>
 
           {/* Δεξιά Στήλη: Διακρίσεις & Φιλοσοφία */}
-          <Grid item xs={12} md={5}>
+          <Grid size={{ xs: 12, md: 5 }}>
             {/* Κάρτα Διακρίσεων */}
             <Paper sx={{ p: 4, bgcolor: 'primary.main', color: 'white', borderRadius: 2, mb: 3 }}>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>

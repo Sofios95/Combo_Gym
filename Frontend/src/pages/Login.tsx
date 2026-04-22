@@ -10,21 +10,17 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
-  const { login } = useAuth(); // <--- Εδώ "τραβάμε" το login logic
+  const { login } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      // Χρήση του api αντί για axios
       const response = await api.post('/auth/login', {
         email,
         password
       });
 
       const { token } = response.data;
-
-      // 🔥 ΔΙΟΡΘΩΣΗ 3: Καλούμε τη login του Context. 
-      // Αυτή θα σώσει το token ΚΑΙ θα τραβήξει τα tokens από το backend αυτόματα.
       login(token);
       
       alert("🔥 Welcome back, Champ!");
@@ -36,7 +32,6 @@ const Login = () => {
   };
 
   return (
-    // ... το υπόλοιπο UI σου παραμένει ίδιο και απαράλλαχτο ...
     <Box sx={{ minHeight: '90vh', display: 'flex', alignItems: 'center', bgcolor: 'background.default' }}>
       <Container maxWidth="xs">
         <Paper elevation={3} sx={{ p: 4, bgcolor: '#121212', borderRadius: '15px', border: '1px solid #333' }}>
@@ -74,8 +69,9 @@ const Login = () => {
             >
               ΕΙΣΟΔΟΣ
             </Button>
+            {/* ΔΙΟΡΘΩΣΗ: Αλλαγή Grid για MUI v6 */}
             <Grid container sx={{ mt: 2, justifyContent: 'center' }}>
-              <Grid item>
+              <Grid size={{ xs: 12 }} sx={{ textAlign: 'center' }}>
                 <Link component={RouterLink} to="/register" sx={{ color: '#aaa', textDecoration: 'none', '&:hover': { color: '#d32f2f' } }}>
                   {"Δεν έχεις λογαριασμό; Γράψου εδώ"}
                 </Link>

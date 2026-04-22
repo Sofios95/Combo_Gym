@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { Box, Container, Paper, Typography, TextField, Button, Link, Grid } from '@mui/material';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+// 🔥 ΔΙΟΡΘΩΣΗ: Χρήση του δικού σου api config αντί για σκέτο axios
+import api from '../api/axiosConfig'; 
 
 const Register = () => {
-  const [name, setName] = useState(''); // Αν θες να το σώσεις στη βάση αργότερα
+  const [name, setName] = useState(''); 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
@@ -12,14 +13,14 @@ const Register = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      // Χτυπάμε το endpoint του Backend
-      const response = await axios.post('http://localhost:5000/api/auth/register', {
+      // Χρήση του api instance για να παίζει σωστά στο deployment
+      const response = await api.post('/auth/register', {
         email,
         password
       });
 
-      alert(response.data.message); // "🥊 Ο Boxer γράφτηκε στο γυμναστήριο!"
-      navigate('/login'); // Τον στέλνουμε να κάνει login
+      alert(response.data.message); 
+      navigate('/login'); 
 
     } catch (err: any) {
       alert(err.response?.data?.message || "Η εγγραφή απέτυχε");
@@ -73,8 +74,10 @@ const Register = () => {
             >
               ΕΓΓΡΑΦΗ
             </Button>
+            
+            {/* ΔΙΟΡΘΩΣΗ: Αλλαγή Grid για MUI v6 */}
             <Grid container sx={{ mt: 2, justifyContent: 'center' }}>
-              <Grid item>
+              <Grid size={{ xs: 12 }} sx={{ textAlign: 'center' }}>
                 <Link component={RouterLink} to="/login" sx={{ color: '#aaa', textDecoration: 'none', '&:hover': { color: '#d32f2f' } }}>
                   {"Έχεις ήδη λογαριασμό; Σύνδεση"}
                 </Link>

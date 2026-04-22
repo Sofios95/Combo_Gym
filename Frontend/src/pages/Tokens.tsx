@@ -88,10 +88,11 @@ const Tokens = () => {
 
         <Grid container spacing={2} alignItems="stretch">
           {tokenPackages.map((pkg, index) => (
-            <Grid item xs={12} sm={6} md={3} key={index} sx={{ display: 'flex' }}>
+            /* ΔΙΟΡΘΩΣΗ: Αφαίρεση 'item' και χρήση 'size' για MUI v6 */
+            <Grid key={index} size={{ xs: 12, sm: 6, md: 3 }} sx={{ display: 'flex' }}>
               <Card sx={{ 
                 bgcolor: '#0a0a0a', 
-                borderRadius: '0px', // Full industrial look
+                borderRadius: '0px', 
                 border: pkg.featured ? '2px solid #d32f2f' : '1px solid #1a1a1a',
                 textAlign: 'left',
                 transition: '0.2s',
