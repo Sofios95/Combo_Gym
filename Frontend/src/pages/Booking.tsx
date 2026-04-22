@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Box, Container, Typography, Grid, Paper, Button, CircularProgress } from '@mui/material';
-// ΔΙΟΡΘΩΣΗ: Αφαιρέθηκε το EventAvailable που δεν χρησιμοποιούνταν
 import api from '../api/axiosConfig';
 import { useAuth } from '../context/AuthContext';
 
@@ -40,7 +39,7 @@ const Booking = () => {
   const handleBooking = async (slotId: number) => {
     if (processingId) return;
 
-    if (userTokens <= 0) {
+    if (userTokens !== undefined && userTokens <= 0) {
       alert("❌ Δεν έχεις αρκετά tokens! Αγόρασε πακέτο για να συνεχίσεις.");
       return;
     }
@@ -69,7 +68,6 @@ const Booking = () => {
   return (
     <Box sx={{ bgcolor: '#0a0a0a', minHeight: '100vh', py: 8 }}>
       <Container maxWidth="lg">
-        {/* Header Section */}
         <Box sx={{ 
           display: 'flex', 
           flexDirection: { xs: 'column', md: 'row' }, 
@@ -104,10 +102,8 @@ const Booking = () => {
           </Paper>
         </Box>
 
-        {/* Schedule Grid */}
         <Grid container spacing={2}>
           {days.map((day) => (
-            /* ΔΙΟΡΘΩΣΗ: Χρήση size αντί για item/xs/md για MUI v6 συμβατότητα */
             <Grid key={day} size={{ xs: 12, md: 2.4 }}>
               <Typography variant="h6" align="center" sx={{ mb: 3, fontWeight: 900, color: '#d32f2f', textTransform: 'uppercase', letterSpacing: 1 }}>
                 {day}
@@ -128,10 +124,11 @@ const Booking = () => {
                       textAlign: 'center',
                       borderRadius: '0px',
                       transition: 'all 0.2s ease-in-out',
-                      '&:hover': !isFull && !isProcessing && { 
+                      // ΔΙΟΡΘΩΣΗ: Ternary για αποφυγή boolean error στο TS
+                      '&:hover': (!isFull && !isProcessing) ? { 
                         borderColor: '#d32f2f', 
                         bgcolor: '#161616'
-                      }
+                      } : {}
                     }}
                   >
                     <Typography variant="h6" sx={{ fontWeight: 900, color: 'white', mb: 0.5 }}>
