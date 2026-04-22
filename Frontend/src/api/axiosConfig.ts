@@ -1,20 +1,18 @@
 import axios from 'axios';
 
-// Δημιουργούμε ένα "instance" του axios με δυναμικό URL
+// Δημιουργούμε το instance του axios
 const api = axios.create({
-  // Αν υπάρχει η μεταβλητή VITE_API_URL (στο Vercel), τη χρησιμοποιούμε.
-  // Αλλιώς, πάμε στο localhost για τοπικό development.
+  // Χρησιμοποιεί τη μεταβλητή από το Vercel ή το τοπικό σου localhost
   baseURL: import.meta.env.VITE_API_URL 
-    ? `${import.meta.env.VITE_API_URL}/api` 
+    ? `${import.meta.env.VITE_API_URL.replace(/\/$/, '')}/api` 
     : 'http://localhost:5000/api',
 });
 
-// REQUEST INTERCEPTOR: Εκτελείται ΠΡΙΝ φύγει κάθε αίτημα
+// REQUEST INTERCEPTOR: Προσθήκη του Token
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
     if (token) {
-      // Προσθέτουμε το JWT Token αυτόματα σε κάθε call
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
@@ -24,14 +22,13 @@ api.interceptors.request.use(
   }
 );
 
-// RESPONSE INTERCEPTOR: Εκτελείται ΜΟΛΙΣ έρθει η απάντηση
+// RESPONSE INTERCEPTOR: Διαχείριση σφαλμάτων
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    // Αν το backend στείλει 401 (Unauthorized), σημαίνει το token δεν ισχύει
     if (error.response && error.response.status === 401) {
-      localStorage.removeItem('token'); // Καθαρίζουμε το ληγμένο token
-      // Προαιρετικά: window.location.href = '/login'; 
+      localStorage.removeItem('token');
+      // window.location.href = '/login'; // Ενεργοποίησέ το αν θες αυτόματο logout
     }
     return Promise.reject(error);
   }
