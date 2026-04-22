@@ -1,8 +1,12 @@
 import axios from 'axios';
 
-// Δημιουργούμε ένα "instance" του axios με τις δικές μας ρυθμίσεις
+// Δημιουργούμε ένα "instance" του axios με δυναμικό URL
 const api = axios.create({
-  baseURL: 'http://localhost:5000/api', // Η διεύθυνση του Backend σου στο Docker
+  // Αν υπάρχει η μεταβλητή VITE_API_URL (στο Vercel), τη χρησιμοποιούμε.
+  // Αλλιώς, πάμε στο localhost για τοπικό development.
+  baseURL: import.meta.env.VITE_API_URL 
+    ? `${import.meta.env.VITE_API_URL}/api` 
+    : 'http://localhost:5000/api',
 });
 
 // REQUEST INTERCEPTOR: Εκτελείται ΠΡΙΝ φύγει κάθε αίτημα
