@@ -22,7 +22,11 @@ dotenv.config();
 const app = express();
 
 // 1. Global Middlewares
-app.use(cors()); // Για να μπορεί το React να μιλάει με το Backend
+app.use(cors({
+  origin: 'https://combo-gym-three.vercel.app',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+})); // Για να μπορεί το React να μιλάει με το Backend
 app.use(express.json()); // Για να διαβάζει JSON στο body
 app.use(requestLogger); // Για να βλέπεις τι συμβαίνει στο terminal
 app.use(morgan('dev'));
