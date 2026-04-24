@@ -1,27 +1,27 @@
 /* src/index.css */
+
+/* 1. Εξαφάνισε το κόκκινο outline αν σε ζαλίζει, αλλά κράτα αυτό: */
 * {
   box-sizing: border-box !important;
 }
 
+/* 2. ΑΥΤΟ ΕΙΝΑΙ ΤΟ ΚΛΕΙΔΙ */
 html, body {
   margin: 0 !important;
   padding: 0 !important;
   width: 100% !important;
-  max-width: 100vw !important;
+  max-width: 100% !important; /* Όχι 100vw, βάλε 100% */
+  overflow-x: hidden !important; /* Επιβολή εξαφάνισης του οριζόντιου scroll */
+  position: relative;
+}
+
+#root {
+  width: 100% !important;
   overflow-x: hidden !important;
-  background-color: #000;
 }
 
-/* Αυτό θα "μαντρώσει" το Grid που ξεφεύγει */
-.MuiGrid-container {
-  width: 100% !important;
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
-/* Αυτό θα αναγκάσει τις κάρτες να μην σπρώχνουν το πλάτος */
-.MuiGrid-item {
-  width: 100% !important;
+/* 3. Force τα Sections να μην βγαίνουν ΠΟΤΕ έξω */
+section, div, main, header {
   max-width: 100% !important;
+  overflow-x: hidden !important;
 }
-* { outline: 1px solid red !important; }
