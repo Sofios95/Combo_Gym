@@ -24,3 +24,4 @@ html, body {
   width: 100% !important;
   max-width: 100% !important;
 }
+* { outline: 1px solid red !important; }
