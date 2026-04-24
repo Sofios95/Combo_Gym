@@ -15,20 +15,32 @@ import Tokens from "./pages/Tokens";
 
 function App() {
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
+    <Box 
+      sx={{ 
+        display: "flex", 
+        flexDirection: "column", 
+        minHeight: "100vh",
+        width: "100%",
+        overflowX: "hidden", // <--- Αυτό εμποδίζει τα μαύρα κενά δεξιά
+        position: "relative"
+      }}
+    >
       <Navbar />
 
-      <Box component="main" sx={{ flexGrow: 1 }}>
+      <Box 
+        component="main" 
+        sx={{ 
+          flexGrow: 1,
+          width: "100%",
+          display: "flex",
+          flexDirection: "column"
+        }}
+      >
         <Routes>
-          {/* Η Αρχική που πλέον περιέχει τα πάντα (Hero, Coach, Tokens κλπ) */}
           <Route path="/" element={<Home />} />
-          
-          {/* Σελίδες που θέλουμε να φαίνονται "μόνες" τους */}
           <Route path="/book" element={<Booking />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-
-          {/* Αν κάποιος πληκτρολογήσει απευθείας το URL, θα τον βγάλει στη σελίδα */}
           <Route path="/my-bookings" element={<MyBookings />} />
           <Route path="/coach" element={<CoachProfile />} />
           <Route path="/tokens" element={<Tokens />} />
