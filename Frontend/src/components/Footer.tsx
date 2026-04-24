@@ -11,15 +11,16 @@ const Footer = () => {
       sx={{ 
         bgcolor: '#000', 
         color: 'white', 
-        py: 4, 
+        py: { xs: 6, md: 4 }, // Περισσότερο padding στο κινητό για να μην "κολλάει"
         borderTop: `2px solid ${theme.palette.primary.main}`, 
-        mt: 'auto' 
+        mt: 'auto',
+        width: '100%'
       }}
     >
       <Container maxWidth="lg">
         <Stack 
           direction={{ xs: 'column', md: 'row' }} 
-          spacing={3} 
+          spacing={{ xs: 4, md: 3 }} // Περισσότερο κενό ανάμεσα στα στοιχεία στο κινητό
           justifyContent="space-between" 
           alignItems="center"
         >
@@ -51,27 +52,32 @@ const Footer = () => {
           </Box>
 
           {/* 2. Social Media Links */}
-          <Stack direction="row" spacing={1}>
-            <IconButton 
-              href="https://www.facebook.com/profile.php?id=100063726062395" 
-              target="_blank" 
-              sx={{ color: 'white', '&:hover': { color: 'primary.main' } }}
-            >
-              <FacebookIcon />
-            </IconButton>
-            <IconButton 
-              href="https://www.instagram.com/combo.gym/" 
-              target="_blank" 
-              sx={{ color: 'white', '&:hover': { color: 'primary.main' } }}
-            >
-              <InstagramIcon />
-            </IconButton>
-          </Stack>
+          <Box>
+              <Typography variant="subtitle2" sx={{ color: '#666', mb: 1, textAlign: 'center', display: { xs: 'block', md: 'none' } }}>
+                  FOLLOW US
+              </Typography>
+              <Stack direction="row" spacing={2}>
+                <IconButton 
+                  href="https://www.facebook.com/profile.php?id=100063726062395" 
+                  target="_blank" 
+                  sx={{ color: 'white', bgcolor: 'rgba(255,255,255,0.05)', '&:hover': { color: 'primary.main', bgcolor: 'rgba(255,255,255,0.1)' } }}
+                >
+                  <FacebookIcon />
+                </IconButton>
+                <IconButton 
+                  href="https://www.instagram.com/combo.gym/" 
+                  target="_blank" 
+                  sx={{ color: 'white', bgcolor: 'rgba(255,255,255,0.05)', '&:hover': { color: 'primary.main', bgcolor: 'rgba(255,255,255,0.1)' } }}
+                >
+                  <InstagramIcon />
+                </IconButton>
+              </Stack>
+          </Box>
 
-          {/* 3. Credits Section (DevSof) */}
+          {/* 3. Credits Section */}
           <Box sx={{ textAlign: { xs: 'center', md: 'right' } }}>
             <Typography variant="body2" sx={{ color: '#aaa' }}>
-              Made by{' '}
+              Designed & Developed by{' '}
               <Link 
                 href="https://github.com/Sofios95" 
                 target="_blank" 

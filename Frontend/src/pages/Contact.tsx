@@ -7,23 +7,32 @@ const Contact = () => {
   const theme = useTheme();
 
   return (
-    <Container id="contact" maxWidth="lg" sx={{ py: { xs: 8, md: 12 } }}>
-      {/* Τίτλος Section */}
-      <Typography variant="h3" sx={{ fontWeight: 900, mb: 6, textTransform: 'uppercase', textAlign: 'center' }}>
+    <Container id="contact" maxWidth="lg" sx={{ py: { xs: 6, md: 12 } }}>
+      {/* Τίτλος Section - Responsive font size */}
+      <Typography 
+        variant="h3" 
+        sx={{ 
+          fontWeight: 900, 
+          mb: { xs: 4, md: 6 }, 
+          textTransform: 'uppercase', 
+          textAlign: 'center',
+          fontSize: { xs: '2rem', md: '3rem' } 
+        }}
+      >
         ΕΠΙΚΟΙΝΩΝΗΣΕ <span style={{ color: theme.palette.primary.main }}>ΜΑΖΙ ΜΑΣ</span>
       </Typography>
 
-      <Stack direction={{ xs: 'column', md: 'row' }} spacing={6}>
+      <Stack direction={{ xs: 'column', md: 'row' }} spacing={{ xs: 4, md: 6 }}>
         
-        {/* 1. Στοιχεία Επικοινωνίας (Αριστερή Στήλη) */}
-        <Box sx={{ flex: 1 }}>
-          <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 3 }}>
+        {/* 1. Στοιχεία Επικοινωνίας */}
+        <Box sx={{ flex: 1, textAlign: { xs: 'center', md: 'left' } }}>
+          <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 4, fontSize: { xs: '1.2rem', md: '1.5rem' } }}>
             COMBO GYM - ΑΛΕΞΑΝΔΡΟΣ
           </Typography>
           
           <Stack spacing={4}>
             {/* Διεύθυνση */}
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, alignItems: 'center', gap: 2 }}>
               <LocationOnIcon sx={{ color: 'primary.main', fontSize: '2rem' }} />
               <Box>
                 <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>ΔΙΕΥΘΥΝΣΗ</Typography>
@@ -32,7 +41,7 @@ const Contact = () => {
             </Box>
 
             {/* Τηλέφωνο */}
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, alignItems: 'center', gap: 2 }}>
               <PhoneIcon sx={{ color: 'primary.main', fontSize: '2rem' }} />
               <Box>
                 <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>ΤΗΛΕΦΩΝΟ</Typography>
@@ -41,7 +50,7 @@ const Contact = () => {
             </Box>
 
             {/* Instagram */}
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, alignItems: 'center', gap: 2 }}>
               <InstagramIcon sx={{ color: 'primary.main', fontSize: '2rem' }} />
               <Box>
                 <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>INSTAGRAM</Typography>
@@ -56,17 +65,17 @@ const Contact = () => {
             </Box>
           </Stack>
 
-          {/* Κουμπί για Instagram DM */}
           <Button 
             variant="contained" 
             fullWidth 
             size="large"
             sx={{ 
-              mt: 6, 
+              mt: 5, 
               py: 2, 
               fontWeight: 'bold', 
-              fontSize: '1.1rem',
+              fontSize: { xs: '0.9rem', md: '1.1rem' },
               bgcolor: 'primary.main',
+              borderRadius: '30px',
               '&:hover': { bgcolor: 'error.dark' }
             }}
             href="https://www.instagram.com/combo.gym/"
@@ -76,10 +85,10 @@ const Contact = () => {
           </Button>
         </Box>
 
-        {/* 2. Google Map (Δεξιά Στήλη) */}
+        {/* 2. Google Map - Διορθωμένο ύψος και πλάτος για κινητά */}
         <Box sx={{ 
           flex: 1.5, 
-          height: '400px', 
+          height: { xs: '300px', md: '450px' }, 
           width: '100%', 
           borderRadius: '12px', 
           overflow: 'hidden', 
@@ -88,7 +97,7 @@ const Contact = () => {
         }}>
           <iframe
             title="Combo Gym Map"
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3146.123456789!2d23.7345678!3d37.9512345!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14a1bd3f1234567b%3A0x123456789abcdef!2sPentelis%204%2C%20Dafni%20172%2035!5e0!3m2!1sen!2sgr!4v1711234567890!5m2!1sen!2sgr"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m12!1m3!1d3146.06!2d23.73!3d37.95!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzfCsDU3JzAwLjAiTiAyM8KwNDMnNTAuMCJF!5e0!3m2!1sel!2sgr!4v1234567890" // Βάλε εδώ το σωστό embed link σου
             width="100%"
             height="100%"
             style={{ border: 0 }}
