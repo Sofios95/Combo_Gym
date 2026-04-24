@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { 
   Box, Container, Typography, Card, CardContent, 
-  Button, Divider, Backdrop, CircularProgress, Paper, Stack 
+  Button, Backdrop, CircularProgress, Paper,
 } from '@mui/material';
 import api from '../api/axiosConfig';
 import { useAuth } from '../context/AuthContext';
