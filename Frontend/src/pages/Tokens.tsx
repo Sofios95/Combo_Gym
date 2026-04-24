@@ -64,7 +64,14 @@ const Tokens = () => {
   };
 
   return (
-    <Box sx={{ bgcolor: '#000000', minHeight: '100vh', pt: 12, pb: 10 }}>
+    <Box sx={{ 
+      bgcolor: '#000000', 
+      minHeight: '100vh', 
+      pt: { xs: 8, md: 12 }, 
+      pb: 10,
+      width: '100%',
+      overflow: 'hidden' 
+    }}>
       
       <Backdrop
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1, backdropFilter: 'blur(10px)' }}
@@ -79,16 +86,38 @@ const Tokens = () => {
       </Backdrop>
 
       <Container maxWidth="xl">
-        <Typography variant="h2" align="center" sx={{ fontWeight: 900, mb: 1, textTransform: 'uppercase', color: '#ffffff', fontSize: { xs: '2.8rem', md: '4.5rem' }, letterSpacing: '-2px' }}>
+        <Typography 
+          variant="h2" 
+          align="center" 
+          sx={{ 
+            fontWeight: 900, 
+            mb: 1, 
+            textTransform: 'uppercase', 
+            color: '#ffffff', 
+            fontSize: { xs: '2.2rem', md: '4.5rem' }, 
+            letterSpacing: '-1px' 
+          }}
+        >
           COMBO <span style={{ color: '#d32f2f' }}>PLANS</span>
         </Typography>
-        <Typography variant="h6" align="center" sx={{ mb: 10, color: '#666', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '2px' }}>
+        <Typography 
+          variant="h6" 
+          align="center" 
+          sx={{ 
+            mb: { xs: 6, md: 10 }, 
+            color: '#666', 
+            textTransform: 'uppercase', 
+            fontWeight: 800, 
+            letterSpacing: '2px',
+            fontSize: { xs: '0.8rem', md: '1.25rem' }
+          }}
+        >
           NO EXCUSES. JUST TRAINING.
         </Typography>
 
-        <Grid container spacing={2} alignItems="stretch">
+        {/* Στην v6 το Grid container δεν θέλει item στα παιδιά, μόνο size */}
+        <Grid container spacing={3}>
           {tokenPackages.map((pkg, index) => (
-            /* ΔΙΟΡΘΩΣΗ: Αφαίρεση 'item' και χρήση 'size' για MUI v6 */
             <Grid key={index} size={{ xs: 12, sm: 6, md: 3 }} sx={{ display: 'flex' }}>
               <Card sx={{ 
                 bgcolor: '#0a0a0a', 
@@ -103,27 +132,38 @@ const Tokens = () => {
                 '&:hover': { bgcolor: '#111', borderColor: '#d32f2f' }
               }}>
                 {pkg.featured && (
-                  <Box sx={{ position: 'absolute', top: 0, right: 0, bgcolor: '#d32f2f', color: '#fff', px: 2, py: 0.5, fontSize: '0.7rem', fontWeight: 900 }}>
+                  <Box sx={{ 
+                    position: 'absolute', 
+                    top: 0, 
+                    right: 0, 
+                    bgcolor: '#d32f2f', 
+                    color: '#fff', 
+                    px: 2, 
+                    py: 0.5, 
+                    fontSize: '0.7rem', 
+                    fontWeight: 900,
+                    zIndex: 10
+                  }}>
                     MOST POPULAR
                   </Box>
                 )}
                 
-                <CardContent sx={{ p: 4, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+                <CardContent sx={{ p: { xs: 3, md: 4 }, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
                   <Typography variant="caption" sx={{ fontWeight: 900, color: '#d32f2f', letterSpacing: '2px', mb: 1 }}>
                     {pkg.title}
                   </Typography>
                   
                   <Box sx={{ display: 'flex', alignItems: 'baseline', mb: 1 }}>
-                    <Typography variant="h2" sx={{ fontWeight: 900, color: '#ffffff' }}>
+                    <Typography variant="h2" sx={{ fontWeight: 900, color: '#ffffff', fontSize: { xs: '2.5rem', md: '3.5rem' } }}>
                       €{pkg.price}
                     </Typography>
                   </Box>
                   
-                  <Typography variant="h6" sx={{ fontWeight: 800, color: '#444', mb: 3, textTransform: 'uppercase' }}>
+                  <Typography variant="h6" sx={{ fontWeight: 800, color: '#444', mb: 3, textTransform: 'uppercase', fontSize: '1rem' }}>
                     {pkg.tokens} {pkg.tokens === 1 ? 'SESSION' : 'SESSIONS'}
                   </Typography>
 
-                  <Typography variant="body2" sx={{ color: '#888', mb: 4, minHeight: '60px', lineHeight: 1.5, fontWeight: 500 }}>
+                  <Typography variant="body2" sx={{ color: '#888', mb: 4, minHeight: { xs: 'auto', md: '60px' }, lineHeight: 1.5, fontWeight: 500 }}>
                     {pkg.description}
                   </Typography>
 
