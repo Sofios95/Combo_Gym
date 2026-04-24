@@ -97,7 +97,7 @@ const Contact = () => {
         }}>
           <iframe
             title="Combo Gym Map"
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3146.123456789!2d23.7345678!3d37.9512345!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14a1bd1234567890%3A0x1234567890abcdef!2zzqDOtc69z4TOrc67zrfPgiA0LCDOlM6sz4bOvc6tyAxNzIgMzU!5e0!3m2!1sel!2sgr!4v1713970000000!5m2!1sel!2sgr"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3145.874567234567!2d23.7345678!3d37.9501234!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14a1bd123456789b%3A0x123456789abcdef!2zzqDOtc69z4TOrc67zrfPgiA0LCDOlM6sz4bOvc63IDE3MiAzNQ!5e0!3m2!1sel!2sgr!4v1715850000000!5m2!1sel!2sgr"
             width="100%"
             height="100%"
             style={{ border: 0 }}

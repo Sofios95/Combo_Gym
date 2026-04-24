@@ -1,0 +1,25 @@
+/* src/index.css */
+* {
+  box-sizing: border-box !important;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  min-width: 100vw;
+  overflow-x: hidden !important;
+  /* Αυτό εμποδίζει το "λαστιχένιο" σκρολάρισμα στα iPhone */
+  position: relative;
+}
+
+#root {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden !important;
+}
+
+/* Εξαφανίζει την οριζόντια μπάρα αν εμφανιστεί κατά λάθος */
+::-webkit-scrollbar {
+    display: none;
+}
