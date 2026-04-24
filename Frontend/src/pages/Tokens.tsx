@@ -21,7 +21,7 @@ const Tokens = () => {
     try {
       setIsProcessing(true);
       const res = await api.post('/tokens/purchase', { amount: pkg.tokens, packageTitle: pkg.title });
-      await refreshTokens(); 
+      await refreshTokens();
       alert(res.data.message);
     } catch (err: any) {
       alert(err.response?.data?.message || "Σφάλμα");
@@ -29,7 +29,7 @@ const Tokens = () => {
   };
 
   return (
-    <Box sx={{ bgcolor: '#000', minHeight: '100vh', pt: { xs: 8, md: 12 }, pb: 10, width: '100%', overflow: 'hidden' }}>
+    <Box sx={{ bgcolor: '#000', minHeight: '100svh', pt: { xs: 8, md: 12 }, pb: 10, width: '100%', overflow: 'hidden' }}>
       <Backdrop sx={{ color: '#fff', zIndex: 1000 }} open={isProcessing}>
         <CircularProgress color="error" />
       </Backdrop>
@@ -38,49 +38,47 @@ const Tokens = () => {
         <Typography variant="h2" align="center" sx={{ fontWeight: 900, mb: 4, color: '#fff', fontSize: { xs: '2rem', md: '4rem' } }}>
           COMBO <span style={{ color: '#d32f2f' }}>PLANS</span>
         </Typography>
-        
-        {/* ΕΔΩ ΓΙΝΕΤΑΙ Η ΜΑΓΕΙΑ: Χρησιμοποιούμε style={{}} για να είμαστε σίγουροι */}
-        <div style={{ 
-          display: 'flex', 
-          flexWrap: 'wrap', 
-          flexDirection: window.innerWidth < 900 ? 'column' : 'row',
-          gap: '20px', 
+
+        <Box sx={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: '20px',
           justifyContent: 'center',
-          width: '100%'
+          width: '100%',
         }}>
           {tokenPackages.map((pkg, index) => (
-            <div key={index} style={{ 
-              flex: window.innerWidth < 900 ? '1 1 100%' : '1 1 calc(25% - 20px)',
+            <Box key={index} sx={{
+              flex: '1 1 280px',
+              maxWidth: { xs: '100%', md: '320px' },
               width: '100%',
-              minWidth: '280px'
             }}>
-              <Paper sx={{ 
-                bgcolor: '#0a0a0a', 
+              <Paper sx={{
+                bgcolor: '#0a0a0a',
                 color: '#fff',
                 border: pkg.featured ? '2px solid #d32f2f' : '1px solid #1a1a1a',
                 borderRadius: 0,
                 height: '100%',
                 display: 'flex',
                 flexDirection: 'column',
-                p: 3
+                p: 3,
               }}>
                 <Typography variant="caption" sx={{ color: '#d32f2f', fontWeight: 900, mb: 1 }}>{pkg.title}</Typography>
                 <Typography variant="h3" sx={{ fontWeight: 900, mb: 1 }}>€{pkg.price}</Typography>
                 <Typography variant="h6" sx={{ color: '#444', mb: 2 }}>{pkg.tokens} SESSIONS</Typography>
                 <Typography variant="body2" sx={{ color: '#888', mb: 3, flexGrow: 1 }}>{pkg.description}</Typography>
-                <Button 
-                  onClick={() => handlePurchase(pkg)} 
-                  variant="contained" 
-                  fullWidth 
+                <Button
+                  onClick={() => handlePurchase(pkg)}
+                  variant="contained"
+                  fullWidth
                   sx={{ bgcolor: '#d32f2f', fontWeight: 900, py: 1.5, borderRadius: 0 }}
                 >
                   GET STARTED
                 </Button>
                 <Typography variant="caption" sx={{ display: 'block', mt: 2, color: '#333', textAlign: 'center' }}>ΛΗΞΗ: {pkg.expires}</Typography>
               </Paper>
-            </div>
+            </Box>
           ))}
-        </div>
+        </Box>
       </Container>
     </Box>
   );
