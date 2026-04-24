@@ -8,7 +8,7 @@ const Contact = () => {
 
   return (
     <Container id="contact" maxWidth="lg" sx={{ py: { xs: 6, md: 12 } }}>
-      {/* Τίτλος Section - Responsive font size */}
+      {/* Τίτλος Section */}
       <Typography 
         variant="h3" 
         sx={{ 
@@ -85,7 +85,7 @@ const Contact = () => {
           </Button>
         </Box>
 
-        {/* 2. Google Map - Διορθωμένο ύψος και πλάτος για κινητά */}
+        {/* 2. Google Map */}
         <Box sx={{ 
           flex: 1.5, 
           height: { xs: '300px', md: '450px' }, 
@@ -97,7 +97,7 @@ const Contact = () => {
         }}>
           <iframe
             title="Combo Gym Map"
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m12!1m3!1d3146.06!2d23.73!3d37.95!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzfCsDU3JzAwLjAiTiAyM8KwNDMnNTAuMCJF!5e0!3m2!1sel!2sgr!4v1234567890" // Βάλε εδώ το σωστό embed link σου
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3146.123456789!2d23.7345678!3d37.9512345!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14a1bd1234567890%3A0x1234567890abcdef!2zzqDOtc69z4TOrc67zrfPgiA0LCDOlM6sz4bOvc6tyAxNzIgMzU!5e0!3m2!1sel!2sgr!4v1713970000000!5m2!1sel!2sgr"
             width="100%"
             height="100%"
             style={{ border: 0 }}
