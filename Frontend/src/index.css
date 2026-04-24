@@ -1,38 +1,26 @@
 /* src/index.css */
+* {
+  box-sizing: border-box !important;
+}
 
-/* 1. Κλειδώνει το "σώμα" του site */
 html, body {
   margin: 0 !important;
   padding: 0 !important;
   width: 100% !important;
   max-width: 100vw !important;
   overflow-x: hidden !important;
-  position: relative;
   background-color: #000;
 }
 
-/* 2. Κλειδώνει το root της React */
-#root {
-  width: 100% !important;
-  max-width: 100vw !important;
-  overflow-x: hidden !important;
-}
-
-/* 3. Ο ΕΞΟΛΟΘΡΕΥΤΗΣ: Διορθώνει το αρνητικό margin του MUI Grid */
-/* Αυτό είναι που σου δημιουργεί το κενό δεξιά! */
+/* Αυτό θα "μαντρώσει" το Grid που ξεφεύγει */
 .MuiGrid-container {
   width: 100% !important;
-  margin: 0 !important; 
+  margin: 0 !important;
   padding: 0 !important;
 }
 
-/* 4. Σιγουρεύει ότι οι κάρτες δεν θα βγαίνουν έξω */
+/* Αυτό θα αναγκάσει τις κάρτες να μην σπρώχνουν το πλάτος */
 .MuiGrid-item {
-  box-sizing: border-box !important;
-  padding: 8px !important; /* Δίνει λίγο αέρα ανάμεσα στις κάρτες */
-}
-
-/* 5. Fix για τις εικόνες και τα βίντεο */
-img, video, iframe {
+  width: 100% !important;
   max-width: 100% !important;
 }
