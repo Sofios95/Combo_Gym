@@ -1,5 +1,8 @@
 import { useState } from 'react';
-import { Box, Container, Typography, Button, Backdrop, CircularProgress, Paper } from '@mui/material';
+import { 
+  Box, Container, Typography, 
+  Button, Backdrop, CircularProgress, Paper 
+} from '@mui/material';
 import api from '../api/axiosConfig';
 import { useAuth } from '../context/AuthContext';
 
@@ -26,38 +29,43 @@ const Tokens = () => {
   };
 
   return (
-    <Box sx={{ bgcolor: '#000', minHeight: '100vh', pt: { xs: 8, md: 12 }, pb: 10, width: '100%', overflow: 'hidden' }}>
+    <Box sx={{ bgcolor: '#000', pt: { xs: 8, md: 12 }, pb: 10, width: '100%', overflow: 'hidden' }}>
       <Backdrop sx={{ color: '#fff', zIndex: 1000 }} open={isProcessing}>
         <CircularProgress color="error" />
       </Backdrop>
 
-      <Container maxWidth="lg"> {/* Χρησιμοποιούμε Container όπως στον Coach */}
-        <Box sx={{ textAlign: 'center', mb: 6 }}>
-          <Typography variant="h2" sx={{ color: '#fff', fontWeight: 900, fontSize: { xs: '2.2rem', md: '3.75rem' }, textTransform: 'uppercase' }}>
-            COMBO <span style={{ color: '#d32f2f' }}>PLANS</span>
-          </Typography>
-        </Box>
+      <Container maxWidth="lg">
+        <Typography variant="h2" align="center" sx={{ fontWeight: 900, mb: 6, color: '#fff', fontSize: { xs: '2.2rem', md: '4rem' } }}>
+          COMBO <span style={{ color: '#d32f2f' }}>PLANS</span>
+        </Typography>
 
-        {/* ΑΥΤΟ ΤΟ BOX ΕΙΝΑΙ ΦΩΤΟΤΥΠΙΑ ΤΟΥ COACH PROFILE */}
+        {/* Ο "ΑΝΙΚΗΤΟΣ" CONTAINER */}
         <Box sx={{ 
           display: 'flex', 
-          flexDirection: { xs: 'column', md: 'row' }, 
+          flexFlow: 'row wrap', // Επιτρέπει το σπάσιμο σε πολλαπλές γραμμές
+          justifyContent: 'center',
           gap: 3,
-          width: '100%' 
+          width: '100%'
         }}>
           {tokenPackages.map((pkg, index) => (
-            <Box key={index} sx={{ flex: { xs: '1 1 100%', md: '1 1 25%' }, width: '100%' }}>
+            <Box key={index} sx={{ 
+              // Στο κινητό (xs) 100% πλάτος, στο desktop (md) 23% για να χωράνε 4 με το gap
+              width: { xs: '100%', sm: 'calc(50% - 24px)', md: 'calc(25% - 24px)' },
+              display: 'flex' 
+            }}>
               <Paper sx={{ 
                 p: 4, 
                 bgcolor: '#0a0a0a', 
-                borderBottom: pkg.featured ? '4px solid #d32f2f' : '1px solid #1a1a1a', 
+                border: pkg.featured ? '2px solid #d32f2f' : '1px solid #1a1a1a', 
                 borderRadius: 0,
-                height: '100%',
+                width: '100%',
                 display: 'flex',
-                flexDirection: 'column'
+                flexDirection: 'column',
+                transition: 'transform 0.2s',
+                '&:hover': { transform: 'translateY(-5px)' }
               }}>
                 <Typography variant="caption" sx={{ color: '#d32f2f', fontWeight: 900, mb: 1, textTransform: 'uppercase' }}>
-                    {pkg.title}
+                  {pkg.title}
                 </Typography>
                 <Typography variant="h3" sx={{ fontWeight: 900, color: '#fff', mb: 1 }}>€{pkg.price}</Typography>
                 <Typography variant="h6" sx={{ color: '#444', mb: 2, fontWeight: 800 }}>{pkg.tokens} SESSIONS</Typography>
@@ -68,7 +76,7 @@ const Tokens = () => {
                     onClick={() => handlePurchase(pkg)}
                     variant="contained"
                     fullWidth
-                    sx={{ bgcolor: '#d32f2f', fontWeight: 900, py: 1.5, borderRadius: 0, '&:hover': { bgcolor: '#b71c1c' } }}
+                    sx={{ bgcolor: '#d32f2f', fontWeight: 900, py: 1.5, borderRadius: 0 }}
                   >
                     GET STARTED
                   </Button>

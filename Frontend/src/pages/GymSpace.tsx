@@ -3,7 +3,7 @@ import Gallery from '../components/Gallery'; // Παίρνουμε το Gallery 
 
 const GymSpace = () => {
   return (
-    <Box sx={{ bgcolor: 'background.default', minHeight: '100vh', py: 10 }}>
+    <Box sx={{ bgcolor: 'background.default', py: 10 }}>
       <Container maxWidth="lg">
         <Typography variant="h2" sx={{ fontWeight: 900, mb: 4, textAlign: 'center', color: 'primary.main' }}>
           Ο ΧΩΡΟΣ ΜΑΣ

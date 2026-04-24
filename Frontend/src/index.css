@@ -15,3 +15,17 @@ html, body {
   width: 100%;
   overflow-x: hidden;
 }
+/* src/index.css */
+
+/* Αν η οθόνη είναι μικρή, ανάγκασε ΟΛΑ τα flex containers με πολλές κάρτες να γίνουν στήλη */
+@media (max-width: 600px) {
+  .MuiContainer-root > .MuiBox-root {
+    flex-direction: column !important;
+    align-items: center !important;
+  }
+  
+  .MuiBox-root > div {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
