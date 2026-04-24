@@ -1,36 +1,17 @@
-/* src/index.css */
-
-/* 1. Καθαρίζουμε τα πάντα - Τέλος οι κόκκινες γραμμές */
 * {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
 }
 
-/* 2. Κλειδώνουμε το πλάτος σωστά */
 html, body {
+  margin: 0;
+  padding: 0;
   width: 100%;
   max-width: 100%;
-  overflow-x: hidden; /* Αυτό εξαφανίζει τις οριζόντιες μπάρες */
+  overflow-x: hidden; /* Εξαφανίζει την οριζόντια μπάρα */
   background-color: #000;
-  color: #fff;
-  font-family: 'Inter', sans-serif; /* Ή όποια γραμματοσειρά έχεις */
 }
 
 #root {
   width: 100%;
-  max-width: 100%;
   overflow-x: hidden;
-}
-
-/* 3. Smooth scrolling για να μην "πηδάει" η σελίδα στο μενού */
-html {
-  scroll-behavior: smooth;
-}
-
-/* 4. Διόρθωση για τις εικόνες */
-img {
-  max-width: 100%;
-  height: auto;
-  display: block;
 }
