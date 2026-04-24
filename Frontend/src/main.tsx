@@ -6,6 +6,7 @@ import App from './App';
 import theme from "./theme";
 // 🔥 Εισαγωγή του AuthProvider
 import { AuthProvider } from './context/AuthContext'; 
+import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
