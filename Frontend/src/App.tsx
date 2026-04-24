@@ -10,6 +10,7 @@ import MyBookings from "./pages/MyBooking";
 import CoachProfile from "./pages/CoachProfile";
 import GymSpace from "./pages/GymSpace";
 import Tokens from "./pages/Tokens";
+import './index.css';
 
 function App() {
   return (
