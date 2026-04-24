@@ -1,8 +1,5 @@
 import { useState } from 'react';
-import { 
-  Box, Container, Typography, 
-  Button, Backdrop, CircularProgress, Paper 
-} from '@mui/material';
+import { Box, Container, Typography, Button, Backdrop, CircularProgress, Paper, Stack } from '@mui/material';
 import api from '../api/axiosConfig';
 import { useAuth } from '../context/AuthContext';
 
@@ -29,57 +26,53 @@ const Tokens = () => {
   };
 
   return (
-    <Box sx={{ bgcolor: '#000', minHeight: '100svh', pt: { xs: 8, md: 12 }, pb: 10, width: '100%', overflowX: 'hidden' }}>
+    <Box sx={{ bgcolor: '#000', minHeight: '100vh', pt: { xs: 8, md: 12 }, pb: 10, width: '100%', overflow: 'hidden' }}>
       <Backdrop sx={{ color: '#fff', zIndex: 1000 }} open={isProcessing}>
         <CircularProgress color="error" />
       </Backdrop>
 
-      <Container maxWidth="lg" sx={{ px: { xs: 2, sm: 3 } }}>
-        <Typography variant="h2" align="center" sx={{ fontWeight: 900, mb: 4, color: '#fff', fontSize: { xs: '2rem', md: '4rem' } }}>
+      <Container maxWidth="lg">
+        <Typography variant="h2" align="center" sx={{ fontWeight: 900, mb: 4, color: '#fff', fontSize: { xs: '2rem', md: '4rem' }, textTransform: 'uppercase' }}>
           COMBO <span style={{ color: '#d32f2f' }}>PLANS</span>
         </Typography>
 
-        <Box sx={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          gap: 3,
-          justifyContent: 'center',
-          width: '100%',
-          /* Force row on desktop, column on mobile αν το flex-basis αποτύχει */
-          flexDirection: { xs: 'column', sm: 'row' }
+        {/* Χρησιμοποιούμε την ίδια ακριβώς λογική με το Coach Profile */}
+        <Box sx={{ 
+          display: 'flex', 
+          flexDirection: { xs: 'column', md: 'row' }, 
+          gap: 3, 
+          width: '100%' 
         }}>
           {tokenPackages.map((pkg, index) => (
-            <Box key={index} sx={{
-              /* Στο κινητό 100%, στο desktop 4 κάρτες ανά σειρά (μείον το gap) */
-              flex: { xs: '1 1 100%', sm: '1 1 calc(45% - 24px)', md: '1 1 calc(23% - 24px)' },
-              maxWidth: { xs: '100%', md: '320px' },
-              display: 'flex'
-            }}>
-              <Paper sx={{
-                bgcolor: '#0a0a0a',
-                color: '#fff',
-                border: pkg.featured ? '2px solid #d32f2f' : '1px solid #1a1a1a',
+            <Box key={index} sx={{ flex: { xs: '1 1 100%', md: '1 1 25%' }, width: '100%' }}>
+              <Paper sx={{ 
+                p: 3, 
+                bgcolor: '#0a0a0a', 
+                border: pkg.featured ? '2px solid #d32f2f' : '1px solid #1a1a1a', 
                 borderRadius: 0,
-                width: '100%',
+                height: '100%',
                 display: 'flex',
                 flexDirection: 'column',
-                p: 3,
-                transition: 'transform 0.2s',
-                '&:hover': { transform: 'scale(1.02)' }
+                textAlign: 'center'
               }}>
                 <Typography variant="caption" sx={{ color: '#d32f2f', fontWeight: 900, mb: 1 }}>{pkg.title}</Typography>
-                <Typography variant="h3" sx={{ fontWeight: 900, mb: 1 }}>€{pkg.price}</Typography>
+                <Typography variant="h3" sx={{ fontWeight: 900, color: '#fff', mb: 1 }}>€{pkg.price}</Typography>
                 <Typography variant="h6" sx={{ color: '#444', mb: 2 }}>{pkg.tokens} SESSIONS</Typography>
-                <Typography variant="body2" sx={{ color: '#888', mb: 3, flexGrow: 1 }}>{pkg.description}</Typography>
-                <Button
-                  onClick={() => handlePurchase(pkg)}
-                  variant="contained"
-                  fullWidth
-                  sx={{ bgcolor: '#d32f2f', fontWeight: 900, py: 1.5, borderRadius: 0, '&:hover': { bgcolor: '#b71c1c' } }}
-                >
-                  GET STARTED
-                </Button>
-                <Typography variant="caption" sx={{ display: 'block', mt: 2, color: '#333', textAlign: 'center' }}>ΛΗΞΗ: {pkg.expires}</Typography>
+                <Typography variant="body2" sx={{ color: '#888', mb: 4, flexGrow: 1 }}>{pkg.description}</Typography>
+                
+                <Box sx={{ mt: 'auto' }}>
+                  <Button
+                    onClick={() => handlePurchase(pkg)}
+                    variant="contained"
+                    fullWidth
+                    sx={{ bgcolor: '#d32f2f', fontWeight: 900, py: 1.5, borderRadius: 0 }}
+                  >
+                    GET STARTED
+                  </Button>
+                  <Typography variant="caption" sx={{ display: 'block', mt: 2, color: '#333' }}>
+                    ΛΗΞΗ: {pkg.expires}
+                  </Typography>
+                </Box>
               </Paper>
             </Box>
           ))}
