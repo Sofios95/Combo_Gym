@@ -1,5 +1,4 @@
-import { Box, Typography, Container, Paper } from '@mui/material'; 
-import { Grid2 as Grid } from '@mui/material'; // Χρησιμοποιούμε το Grid2 αν έχεις νεότερη έκδοση MUI, αλλιώς Grid
+import { Box, Typography, Container, Paper, Grid } from '@mui/material';
 import TrophyIcon from '@mui/icons-material/EmojiEvents';
 import HistoryIcon from '@mui/icons-material/History';
 
