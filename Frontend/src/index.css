@@ -29,3 +29,59 @@ html, body {
     max-width: 100% !important;
   }
 }
+/* --- SWEETALERT2 CUSTOM BRUTAL STYLING --- */
+
+/* Το κεντρικό πλαίσιο του Alert */
+.box-alert-popup {
+  border: 2px solid #d32f2f !important; /* Κόκκινο περίγραμμα */
+  border-radius: 0px !important;       /* Τέρμα τετράγωνο */
+  background-color: #0a0a0a !important; /* Πολύ σκούρο γκρι/μαύρο */
+  font-family: 'Roboto', sans-serif !important; /* Ή όποια γραμματοσειρά χρησιμοποιείς */
+}
+
+/* Το κουμπί επιβεβαίωσης */
+.box-alert-button {
+  background-color: #d32f2f !important;
+  color: white !important;
+  padding: 12px 40px !important;
+  font-weight: 900 !important;
+  text-transform: uppercase !important;
+  border-radius: 0px !important; /* Τετράγωνο κουμπί */
+  border: none !important;
+  cursor: pointer !important;
+  margin: 10px !important;
+  transition: 0.2s ease-in-out !important;
+}
+
+.box-alert-button:hover {
+  background-color: #ff1744 !important;
+  transform: scale(1.05);
+}
+
+/* Το κουμπί ακύρωσης (για το Confirm) */
+.box-cancel-button {
+  background-color: #333 !important;
+  color: #888 !important;
+  padding: 12px 40px !important;
+  font-weight: 900 !important;
+  text-transform: uppercase !important;
+  border-radius: 0px !important;
+  border: none !important;
+  cursor: pointer !important;
+  margin: 10px !important;
+}
+
+.box-cancel-button:hover {
+  background-color: #444 !important;
+  color: #fff !important;
+}
+
+/* Διόρθωση για το Icon της επιτυχίας/σφάλματος */
+.swal2-icon {
+  border-color: #d32f2f !important;
+  color: #d32f2f !important;
+}
+
+.swal2-success-ring {
+  border: .25em solid rgba(211, 47, 47, 0.3) !important;
+}

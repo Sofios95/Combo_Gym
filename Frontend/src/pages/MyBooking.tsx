@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Box, Container, Typography, Paper, Button, Stack, CircularProgress } from '@mui/material';
 import { CancelScheduleSend, EventBusy, LockClock } from '@mui/icons-material'; 
+import Swal from 'sweetalert2'; // 🔥 Εισαγωγή SweetAlert2
 import api from '../api/axiosConfig';
 import { useAuth } from '../context/AuthContext';
 
@@ -10,7 +11,6 @@ interface Booking {
   time: string;
 }
 
-// Mapping για τον έλεγχο της ώρας
 const daysMap: { [key: string]: number } = {
   'ΚΥΡΙΑΚΗ': 0, 'ΔΕΥΤΕΡΑ': 1, 'ΤΡΙΤΗ': 2, 'ΤΕΤΑΡΤΗ': 3, 
   'ΠΕΜΠΤΗ': 4, 'ΠΑΡΑΣΚΕΥΗ': 5, 'ΣΑΒΒΑΤΟ': 6
@@ -21,6 +21,23 @@ const MyBookings = () => {
   const [loading, setLoading] = useState(true);
   const [processingId, setProcessingId] = useState<number | null>(null);
   const { refreshTokens } = useAuth();
+
+  // Helper για τα Alerts
+  const showBoxAlert = (title: string, text: string, icon: 'success' | 'error') => {
+    Swal.fire({
+      title: `<span style="color: #fff; font-weight: 900; text-transform: uppercase;">${title}</span>`,
+      html: `<span style="color: #888;">${text}</span>`,
+      icon: icon,
+      background: '#0a0a0a',
+      confirmButtonText: 'OK',
+      iconColor: '#d32f2f',
+      customClass: {
+        popup: 'box-alert-popup',
+        confirmButton: 'box-alert-button',
+      },
+      buttonsStyling: false,
+    });
+  };
 
   const fetchMyBookings = useCallback(async () => {
     try {
@@ -38,44 +55,53 @@ const MyBookings = () => {
     fetchMyBookings();
   }, [fetchMyBookings]);
 
-  // Helper function για τον έλεγχο αν επιτρέπεται η ακύρωση (1 ώρα πριν)
   const isCancellable = (day: string, time: string) => {
     const now = new Date();
     const currentDayNum = now.getDay();
     const [h, m] = time.split(':').map(Number);
-    
     const slotTotalMins = h * 60 + m;
     const nowTotalMins = now.getHours() * 60 + now.getMinutes();
-    
     const slotDayNum = daysMap[day.toUpperCase()];
 
-    // Αν η μέρα έχει περάσει (και δεν είναι Κυριακή/Refresh day)
     if (slotDayNum < currentDayNum && currentDayNum !== 0) return false;
-
-    // Αν είναι η ίδια μέρα, έλεγχος για το 60λεπτο
     if (slotDayNum === currentDayNum) {
       if (nowTotalMins >= slotTotalMins - 60) return false;
     }
-
     return true;
   };
 
   const handleCancel = async (slotId: number) => {
-    if (!window.confirm("🤔 Είσαι σίγουρος; Η ακύρωση θα σου επιστρέψει 1 token.")) return;
+    // 🔥 Custom Confirm αντί για window.confirm
+    const result = await Swal.fire({
+      title: '<span style="color: #fff; font-weight: 900;">ARE YOU SURE?</span>',
+      html: '<span style="color: #888;">Η ακύρωση θα σου επιστρέψει 1 token.</span>',
+      icon: 'question',
+      iconColor: '#d32f2f',
+      showCancelButton: true,
+      confirmButtonText: 'YES, CANCEL',
+      cancelButtonText: 'NO, KEEP IT',
+      background: '#0a0a0a',
+      customClass: {
+        popup: 'box-alert-popup',
+        confirmButton: 'box-alert-button',
+        cancelButton: 'box-cancel-button',
+      },
+      buttonsStyling: false,
+    });
+
+    if (!result.isConfirmed) return;
 
     try {
       setProcessingId(slotId);
       await api.delete(`/bookings/cancel/${slotId}`);
       
-      // Update UI
       setMyBookings(prev => prev.filter(b => b.slot_id !== slotId));
       await refreshTokens();
       
-      alert("✅ Η θέση ελευθερώθηκε και το token επιστράφηκε!");
+      showBoxAlert("SUCCESS", "Η θέση ελευθερώθηκε και το token επιστράφηκε!", "success");
     } catch (err: any) {
       const msg = err.response?.data?.message || "Αποτυχία ακύρωσης";
-      alert(msg);
-      // Επαναφέρουμε τα δεδομένα σε περίπτωση που κάτι άλλαξε στο backend
+      showBoxAlert("ERROR", msg, "error");
       fetchMyBookings();
     } finally {
       setProcessingId(null);
@@ -148,7 +174,6 @@ const MyBookings = () => {
                   
                   <Button 
                     variant="contained" 
-                    color="error" 
                     disabled={!cancellable || isProcessing}
                     startIcon={cancellable ? <CancelScheduleSend /> : <LockClock />}
                     onClick={() => handleCancel(booking.slot_id)}
