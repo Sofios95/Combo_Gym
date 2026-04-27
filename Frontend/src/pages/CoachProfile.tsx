@@ -2,7 +2,7 @@ import { Box, Typography, Container, Paper, Stack, Divider, List, ListItem, List
 import TrophyIcon from '@mui/icons-material/EmojiEvents';
 import HistoryIcon from '@mui/icons-material/History';
 import VerifiedIcon from '@mui/icons-material/Verified';
-import SportsIcon from '@mui/icons-material/Sports';
+
 
 const CoachProfile = () => {
   const panhellenicTitles = [

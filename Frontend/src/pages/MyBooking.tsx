@@ -71,7 +71,7 @@ const MyBookings = () => {
   };
 
   const handleCancel = async (slotId: number) => {
-    // 🔥 Custom Confirm αντί για window.confirm
+    
     const result = await Swal.fire({
       title: '<span style="color: #fff; font-weight: 900;">ARE YOU SURE?</span>',
       html: '<span style="color: #888;">Η ακύρωση θα σου επιστρέψει 1 token.</span>',

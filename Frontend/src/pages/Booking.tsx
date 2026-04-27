@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Box, Container, Typography, Paper, Button, CircularProgress } from '@mui/material';
-import Swal from 'sweetalert2'; // 🔥 Εισαγωγή SweetAlert2
+import Swal from 'sweetalert2'; 
 import api from '../api/axiosConfig';
 import { useAuth } from '../context/AuthContext';
 
