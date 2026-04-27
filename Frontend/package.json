@@ -9,19 +9,19 @@
     "lint": "eslint .",
     "preview": "vite preview"
   },
-  "dependencies": {
-    "@emotion/react": "^11.14.0",
-    "@emotion/styled": "^11.14.1",
-    "@mui/icons-material": "^7.3.9",
-    "@mui/lab": "^7.0.1-beta.23",
-    "@mui/material": "^9.0.0",
-    "axios": "^1.15.0",
+ "dependencies": {
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
+    "@mui/icons-material": "^6.1.1",
+    "@mui/lab": "^6.0.0-beta.10",
+    "@mui/material": "^6.1.1",
+    "axios": "^1.7.7",
     "jwt-decode": "^4.0.0",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4",
-    "react-router-dom": "^7.13.2",
-    "sweetalert2": "^11.26.24",
-    "sweetalert2-react-content": "^5.1.2"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.26.2",
+    "sweetalert2": "^11.14.0",
+    "sweetalert2-react-content": "^5.0.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.4",
