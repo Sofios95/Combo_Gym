@@ -4,12 +4,10 @@ import { Link as RouterLink } from 'react-router-dom';
 const Hero = () => {
   return (
     <Box sx={{
-      // Responsive ύψος: 80% στο κινητό, 95% στο desktop
       minHeight: { xs: '80vh', md: '95vh' }, 
       display: 'flex',
       alignItems: 'center',
       position: 'relative',
-      // Το background image παραμένει, με πιο σκούρο overlay για να "πετάγεται" το κείμενο
       background: 'linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url("/alex-img3.jpg")', 
       backgroundSize: 'cover',
       backgroundPosition: 'center',
@@ -19,6 +17,7 @@ const Hero = () => {
       <Container maxWidth="lg">
         <Grid container spacing={4} alignItems="center">
           
+          {/* Χρησιμοποιούμε το κλασικό 'item' prop */}
           <Grid item xs={12} md={8}>
             <Box sx={{ 
               textAlign: { xs: 'center', md: 'left' },
@@ -57,7 +56,6 @@ const Hero = () => {
                 lineHeight: 1.6
               }}>
                 Με 16 χρόνια εμπειρίας στην πυγμαχία, ο Αλέξανδρος δημιουργεί προγράμματα προσαρμοσμένα στις ανάγκες σου. 
-                Από τη θέση μάχης μέχρι την αγωνιστική προετοιμασία, το πλάνο συμμορφώνεται με την ηλικία και την κατάστασή σου.
               </Typography>
 
               <Button 
@@ -66,13 +64,8 @@ const Hero = () => {
                 variant="contained" 
                 size="large"
                 sx={{ 
-                  py: 2, 
-                  px: 6, 
-                  fontSize: '1.2rem', 
-                  borderRadius: 0, // Brutal square design
-                  fontWeight: '900',
-                  bgcolor: '#d32f2f',
-                  textTransform: 'uppercase',
+                  py: 2, px: 6, fontSize: '1.2rem', borderRadius: 0, 
+                  fontWeight: '900', bgcolor: '#d32f2f', textTransform: 'uppercase',
                   '&:hover': { bgcolor: '#ff1744' }
                 }}
               >
@@ -81,7 +74,7 @@ const Hero = () => {
             </Box>
           </Grid>
 
-          {/* Δεξιά πλευρά: Γρήγορα Info Cards (Μόνο σε Desktop) */}
+          {/* Δεξιά πλευρά info cards */}
           <Grid item md={4} sx={{ display: { xs: 'none', md: 'block' } }}>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
               <Paper sx={{ p: 3, bgcolor: 'rgba(20,20,20,0.8)', borderLeft: '4px solid #d32f2f', borderRadius: 0 }}>
@@ -91,10 +84,6 @@ const Hero = () => {
               <Paper sx={{ p: 3, bgcolor: 'rgba(20,20,20,0.8)', borderLeft: '4px solid #d32f2f', borderRadius: 0 }}>
                 <Typography variant="h6" sx={{ color: 'white', fontWeight: 900 }}>SESSIONS</Typography>
                 <Typography variant="body2" sx={{ color: '#666' }}>Group • Ατομικά • Έως 4 άτομα</Typography>
-              </Paper>
-              <Paper sx={{ p: 3, bgcolor: 'rgba(20,20,20,0.8)', borderLeft: '4px solid #d32f2f', borderRadius: 0 }}>
-                <Typography variant="h6" sx={{ color: 'white', fontWeight: 900 }}>CONDITIONING</Typography>
-                <Typography variant="body2" sx={{ color: '#666' }}>Μυϊκή ενδυνάμωση & αντοχή</Typography>
               </Paper>
             </Box>
           </Grid>
