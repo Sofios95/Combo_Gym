@@ -7,7 +7,7 @@ html, body {
   padding: 0;
   width: 100%;
   max-width: 100%;
-  overflow-x: hidden; /* Εξαφανίζει την οριζόντια μπάρα */
+  overflow-x: hidden;
   background-color: #000;
 }
 
@@ -15,38 +15,23 @@ html, body {
   width: 100%;
   overflow-x: hidden;
 }
-/* src/index.css */
 
-/* Αν η οθόνη είναι μικρή, ανάγκασε ΟΛΑ τα flex containers με πολλές κάρτες να γίνουν στήλη */
-@media (max-width: 600px) {
-  .MuiContainer-root > .MuiBox-root {
-    flex-direction: column !important;
-    align-items: center !important;
-  }
-  
-  .MuiBox-root > div {
-    width: 100% !important;
-    max-width: 100% !important;
-  }
-}
 /* --- SWEETALERT2 CUSTOM BRUTAL STYLING --- */
 
-/* Το κεντρικό πλαίσιο του Alert */
 .box-alert-popup {
-  border: 2px solid #d32f2f !important; /* Κόκκινο περίγραμμα */
-  border-radius: 0px !important;       /* Τέρμα τετράγωνο */
-  background-color: #0a0a0a !important; /* Πολύ σκούρο γκρι/μαύρο */
-  font-family: 'Roboto', sans-serif !important; /* Ή όποια γραμματοσειρά χρησιμοποιείς */
+  border: 2px solid #d32f2f !important;
+  border-radius: 0px !important;
+  background-color: #0a0a0a !important;
+  font-family: 'Roboto', sans-serif !important;
 }
 
-/* Το κουμπί επιβεβαίωσης */
 .box-alert-button {
   background-color: #d32f2f !important;
   color: white !important;
   padding: 12px 40px !important;
   font-weight: 900 !important;
   text-transform: uppercase !important;
-  border-radius: 0px !important; /* Τετράγωνο κουμπί */
+  border-radius: 0px !important;
   border: none !important;
   cursor: pointer !important;
   margin: 10px !important;
@@ -58,7 +43,6 @@ html, body {
   transform: scale(1.05);
 }
 
-/* Το κουμπί ακύρωσης (για το Confirm) */
 .box-cancel-button {
   background-color: #333 !important;
   color: #888 !important;
@@ -76,7 +60,6 @@ html, body {
   color: #fff !important;
 }
 
-/* Διόρθωση για το Icon της επιτυχίας/σφάλματος */
 .swal2-icon {
   border-color: #d32f2f !important;
   color: #d32f2f !important;

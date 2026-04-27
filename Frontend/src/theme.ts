@@ -4,7 +4,7 @@ const theme = createTheme({
   palette: {
     mode: 'dark',
     primary: {
-      main: '#D32F2F', // Το κόκκινο του Combo Gym
+      main: '#D32F2F',
       dark: '#B71C1C',
       contrastText: '#ffffff',
     },
@@ -12,8 +12,8 @@ const theme = createTheme({
       main: '#1E1E1E',
     },
     background: {
-      default: '#000000', // Απόλυτο μαύρο για το background
-      paper: '#121212',   // Πολύ σκούρο γκρι για τις κάρτες
+      default: '#000000',
+      paper: '#121212',
     },
     text: {
       primary: '#ffffff',
@@ -21,7 +21,6 @@ const theme = createTheme({
     },
   },
   typography: {
-    // Χρησιμοποιούμε Oswald για το "boxing" vibe (πρέπει να την κάνεις import στο index.html)
     fontFamily: '"Oswald", "Roboto", "Arial", sans-serif',
     h1: { fontWeight: 900, textTransform: 'uppercase', letterSpacing: '2px' },
     h2: { fontWeight: 900, textTransform: 'uppercase', letterSpacing: '1.5px' },
@@ -31,19 +30,16 @@ const theme = createTheme({
     button: { fontWeight: 900, letterSpacing: '1px' },
   },
   shape: {
-    borderRadius: 8, // Όχι πολύ στρογγυλεμένα, να είναι "κοφτερό" το design
+    borderRadius: 8,
   },
   components: {
-    // Κάνουμε τα κουμπιά να φαίνονται πιο "Pro"
     MuiButton: {
       styleOverrides: {
         root: {
-          borderRadius: '4px', // Πιο τετράγωνα κουμπιά για πιο "επιθετικό" στυλ
+          borderRadius: '4px',
           padding: '10px 24px',
           transition: 'all 0.3s ease',
-          '&:hover': {
-            transform: 'scale(1.05)',
-          },
+          // αφαιρέθηκε το global transform: scale(1.05) on hover
         },
         containedPrimary: {
           backgroundColor: '#D32F2F',
@@ -53,12 +49,11 @@ const theme = createTheme({
         },
       },
     },
-    // Κάνουμε τις κάρτες να ξεχωρίζουν
     MuiCard: {
       styleOverrides: {
         root: {
           backgroundColor: '#121212',
-          backgroundImage: 'none', // Αφαιρούμε το default gradient του MUI
+          backgroundImage: 'none',
           border: '1px solid #333',
         },
       },

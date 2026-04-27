@@ -17,64 +17,32 @@ const Hero = () => {
       <Container maxWidth="lg">
         <Grid container spacing={4} alignItems="center">
           
-          {/* Χρησιμοποιούμε το κλασικό 'item' prop */}
           <Grid item xs={12} md={8}>
-            <Box sx={{ 
-              textAlign: { xs: 'center', md: 'left' },
-              mx: { xs: 'auto', md: 0 } 
-            }}>
+            <Box sx={{ textAlign: { xs: 'center', md: 'left' }, mx: { xs: 'auto', md: 0 } }}>
               <Typography variant="overline" sx={{ color: '#d32f2f', fontWeight: 900, letterSpacing: 4 }}>
                 EST. MARCH 2016
               </Typography>
-              
-              <Typography variant="h1" sx={{ 
-                color: 'white', 
-                mb: 2, 
-                fontSize: { xs: '3rem', md: '5.5rem' },
-                lineHeight: 0.9,
-                fontWeight: 900,
-                textTransform: 'uppercase'
-              }}>
+              <Typography variant="h1" sx={{ color: 'white', mb: 2, fontSize: { xs: '3rem', md: '5.5rem' }, lineHeight: 0.9, fontWeight: 900, textTransform: 'uppercase' }}>
                 COMBO <span style={{ color: '#d32f2f' }}>GYM</span>
               </Typography>
-              
-              <Typography variant="h5" sx={{ 
-                color: '#eee', 
-                mb: 3, 
-                fontWeight: 800,
-                fontSize: { xs: '1.2rem', md: '1.8rem' },
-                textTransform: 'uppercase'
-              }}>
+              <Typography variant="h5" sx={{ color: '#eee', mb: 3, fontWeight: 800, fontSize: { xs: '1.2rem', md: '1.8rem' }, textTransform: 'uppercase' }}>
                 Προπόνηση σε όλα τα επίπεδα & κάθε στόχο.
               </Typography>
-
-              <Typography variant="body1" sx={{ 
-                color: '#888', 
-                mb: 5, 
-                fontSize: { xs: '0.95rem', md: '1.1rem' },
-                maxWidth: '650px',
-                lineHeight: 1.6
-              }}>
+              <Typography variant="body1" sx={{ color: '#888', mb: 5, fontSize: { xs: '0.95rem', md: '1.1rem' }, maxWidth: '650px', lineHeight: 1.6 }}>
                 Με 16 χρόνια εμπειρίας στην πυγμαχία, ο Αλέξανδρος δημιουργεί προγράμματα προσαρμοσμένα στις ανάγκες σου. 
               </Typography>
-
               <Button 
                 component={RouterLink} 
-                to="/booking" 
+                to="/book"
                 variant="contained" 
                 size="large"
-                sx={{ 
-                  py: 2, px: 6, fontSize: '1.2rem', borderRadius: 0, 
-                  fontWeight: '900', bgcolor: '#d32f2f', textTransform: 'uppercase',
-                  '&:hover': { bgcolor: '#ff1744' }
-                }}
+                sx={{ py: 2, px: 6, fontSize: '1.2rem', borderRadius: 0, fontWeight: '900', bgcolor: '#d32f2f', textTransform: 'uppercase', '&:hover': { bgcolor: '#ff1744' } }}
               >
                 ΚΛΕΙΣΕ ΘΕΣΗ
               </Button>
             </Box>
           </Grid>
 
-          {/* Δεξιά πλευρά info cards */}
           <Grid item md={4} sx={{ display: { xs: 'none', md: 'block' } }}>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
               <Paper sx={{ p: 3, bgcolor: 'rgba(20,20,20,0.8)', borderLeft: '4px solid #d32f2f', borderRadius: 0 }}>
