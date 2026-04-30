@@ -29,5 +29,27 @@ router.get("/", async (req, res, next) => {
     next(err); // Στέλνει το σφάλμα στον errorHandler που έχεις ορίσει
   }
 });
+router.get("/", async (req, res, next) => {
+  try {
+    const dbResult = await pool.query(
+      "SELECT id, day, time, max_capacity FROM training_slots ORDER BY id"
+    );
 
+    const slotsWithCapacity = await Promise.all(
+      dbResult.rows.map(async (slot) => {
+        const capacity = await redisClient.get(`slot:${slot.id}:capacity`);
+        
+        return {
+          ...slot,
+          // Προτεραιότητα στο Redis, αν λείπει (null) τότε max_capacity
+          current_capacity: capacity !== null ? parseInt(capacity) : slot.max_capacity,
+        };
+      })
+    );
+
+    res.json(slotsWithCapacity);
+  } catch (err) {
+    next(err);
+  }
+});
 export default router;

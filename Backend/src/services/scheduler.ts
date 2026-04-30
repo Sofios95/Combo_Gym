@@ -1,36 +1,40 @@
 import cron from "node-cron";
 import pool from "../config/db";
-import { loadSlotsToRedis } from "../config/redis";
+import redisClient, { loadSlotsToRedis } from "../config/redis";
 
-const syncSlotsWithRedis = async () => {
-  console.log("🔄 Ξεκινάει η ανανέωση των slots στο Redis...");
+const syncSlotsWithRedis = async (forceRefresh = false) => {
+  console.log("🔄 Έλεγχος slots στο Redis...");
   try {
-    const result = await pool.query(
-      "SELECT id, max_capacity FROM training_slots",
-    );
-    await loadSlotsToRedis(result.rows);
-    console.log("✅ Το Redis ενημερώθηκε επιτυχώς!");
+    const result = await pool.query("SELECT id, max_capacity FROM training_slots");
+    
+    for (const slot of result.rows) {
+      const key = `slot:${slot.id}:capacity`;
+      const exists = await redisClient.exists(key);
+
+      // Αν είναι forceRefresh (Κυριακή) ή αν ΔΕΝ υπάρχει το κλειδί (πρώτη φορά/restart), τότε γράψε
+      if (forceRefresh || !exists) {
+        await redisClient.set(key, slot.max_capacity.toString());
+      }
+    }
+    console.log(`✅ Το Redis συγχρονίστηκε (Force: ${forceRefresh})`);
   } catch (err) {
     console.error("❌ Αποτυχία συγχρονισμού Redis:", err);
   }
 };
 
 export const initScheduler = () => {
-  // 1. Εκτέλεση μία φορά στο ξεκίνημα του server
-  syncSlotsWithRedis();
+  // 1. Στο ξεκίνημα του server, ενημερώνουμε ΜΟΝΟ αν λείπουν δεδομένα
+  syncSlotsWithRedis(false);
 
-  // 2. Προγραμματισμένο ραντεβού κάθε Κυριακή στις 12:00 (ώρα Αθήνας)
-  // Αφαιρέθηκε το 'scheduled: true' που δημιουργούσε το Error
+  // 2. Κάθε Κυριακή στις 12:00, κάνουμε υποχρεωτικό reset (Force Refresh)
   cron.schedule(
     "0 12 * * 0",
     async () => {
-      console.log("⏰ Κυριακή 12:00: Αυτόματο εβδομαδιαίο refresh...");
-      await syncSlotsWithRedis();
+      console.log("⏰ Κυριακή 12:00: Πλήρες εβδομαδιαίο refresh...");
+      await syncSlotsWithRedis(true); 
     },
-    {
-      timezone: "Europe/Athens",
-    },
+    { timezone: "Europe/Athens" }
   );
 
-  console.log("📅 Scheduler: On guard for Sunday 12:00 (Athens Time)");
+  console.log("📅 Scheduler: Active");
 };
