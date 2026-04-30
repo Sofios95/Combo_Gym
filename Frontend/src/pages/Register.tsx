@@ -1,34 +1,23 @@
-import { useState, useEffect, useCallback } from 'react';
-import { Box, Container, Typography, Paper, Button, Stack, CircularProgress } from '@mui/material';
-import { CancelScheduleSend, EventBusy, LockClock } from '@mui/icons-material'; 
-import Swal from 'sweetalert2';
-import api from '../api/axiosConfig';
-import { useAuth } from '../context/AuthContext';
+import { useState } from 'react';
+import { Box, Container, Paper, Typography, TextField, Button, Link } from '@mui/material';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2'; // 🔥 Εισαγωγή SweetAlert2
+import api from '../api/axiosConfig'; 
 
-interface Booking {
-  slot_id: number;
-  day: string;
-  time: string;
-}
+const Register = () => {
+  const [name, setName] = useState(''); 
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
-const daysMap: { [key: string]: number } = {
-  'ΚΥΡΙΑΚΗ': 0, 'ΔΕΥΤΕΡΑ': 1, 'ΤΡΙΤΗ': 2, 'ΤΕΤΑΡΤΗ': 3, 
-  'ΠΕΜΠΤΗ': 4, 'ΠΑΡΑΣΚΕΥΗ': 5, 'ΣΑΒΒΑΤΟ': 6
-};
-
-const MyBookings = () => {
-  const [myBookings, setMyBookings] = useState<Booking[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [processingId, setProcessingId] = useState<number | null>(null);
-  const { refreshTokens } = useAuth();
-
+  // Helper για τα Alerts
   const showBoxAlert = (title: string, text: string, icon: 'success' | 'error') => {
     Swal.fire({
       title: `<span style="color: #fff; font-weight: 900; text-transform: uppercase;">${title}</span>`,
       html: `<span style="color: #888;">${text}</span>`,
       icon: icon,
       background: '#0a0a0a',
-      confirmButtonText: 'OK',
+      confirmButtonText: icon === 'success' ? 'GO TO LOGIN' : 'TRY AGAIN',
       iconColor: '#d32f2f',
       customClass: {
         popup: 'box-alert-popup',
@@ -38,145 +27,124 @@ const MyBookings = () => {
     });
   };
 
-  const fetchMyBookings = useCallback(async () => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     try {
-      setLoading(true);
-      const res = await api.get('/bookings/my-bookings');
-      setMyBookings(res.data);
-    } catch (err) {
-      console.error("Error fetching my bookings", err);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+      const response = await api.post('/auth/register', {
+        name, // Φρόντισε το backend σου να δέχεται το name αν το χρειάζεσαι
+        email,
+        password
+      });
 
-  useEffect(() => {
-    fetchMyBookings();
-  }, [fetchMyBookings]);
+      showBoxAlert("WELCOME TO THE TEAM", response.data.message || "Η εγγραφή ολοκληρώθηκε!", "success");
+      navigate('/login'); 
 
-  const isCancellable = (day: string, time: string) => {
-    const now = new Date();
-    const currentDayNum = now.getDay();
-    const [h, m] = time.split(':').map(Number);
-    const slotTotalMins = h * 60 + m;
-    const nowTotalMins = now.getHours() * 60 + now.getMinutes();
-    const slotDayNum = daysMap[day.toUpperCase()];
-
-    if (slotDayNum < currentDayNum && currentDayNum !== 0) return false;
-    if (slotDayNum === currentDayNum) {
-      if (nowTotalMins >= slotTotalMins - 60) return false;
-    }
-    return true;
-  };
-
-  const handleCancel = async (slotId: number) => {
-    const result = await Swal.fire({
-      title: '<span style="color: #fff; font-weight: 900;">ARE YOU SURE?</span>',
-      html: '<span style="color: #888;">Η ακύρωση θα σου επιστρέψει 1 token.</span>',
-      icon: 'question',
-      iconColor: '#d32f2f',
-      showCancelButton: true,
-      confirmButtonText: 'YES, CANCEL',
-      cancelButtonText: 'NO, KEEP IT',
-      background: '#0a0a0a',
-      customClass: {
-        popup: 'box-alert-popup',
-        confirmButton: 'box-alert-button',
-        cancelButton: 'box-cancel-button',
-      },
-      buttonsStyling: false,
-    });
-
-    if (!result.isConfirmed) return;
-
-    try {
-      setProcessingId(slotId);
-      await api.delete(`/bookings/cancel/${slotId}`);
-      setMyBookings(prev => prev.filter(b => b.slot_id !== slotId));
-      await refreshTokens();
-      showBoxAlert("SUCCESS", "Η θέση ελευθερώθηκε και το token επιστράφηκε!", "success");
-    } catch (err: unknown) {
-      const error = err as { response?: { data?: { message?: string } } };
-      const msg = error.response?.data?.message || "Αποτυχία ακύρωσης";
-      showBoxAlert("ERROR", msg, "error");
-      fetchMyBookings();
-    } finally {
-      setProcessingId(null);
+    } catch (err: any) {
+      const errorMsg = err.response?.data?.message || "Η εγγραφή απέτυχε";
+      showBoxAlert("REGISTRATION ERROR", errorMsg, "error");
     }
   };
-
-  if (loading) {
-    return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh', bgcolor: '#0a0a0a' }}>
-        <CircularProgress color="error" />
-      </Box>
-    );
-  }
 
   return (
-    <Box sx={{ bgcolor: '#0a0a0a', py: 10 }}>
-      <Container maxWidth="sm">
-        <Typography variant="h3" sx={{ 
-          fontWeight: 900, color: 'white', mb: 1, textAlign: 'center', textTransform: 'uppercase',
-          display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 2,
-          fontSize: { xs: '2rem', md: '3rem' }
-        }}>
-          MY <span style={{ color: '#d32f2f' }}>SESSIONS</span> <EventBusy sx={{ fontSize: '2.5rem', color: '#d32f2f' }} />
-        </Typography>
-        
-        <Typography variant="body2" sx={{ color: '#666', mb: 6, textAlign: 'center', fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1 }}>
-          Ακυρώσεις επιτρέπονται έως και 60' πριν την έναρξη.
-        </Typography>
+    <Box sx={{ minHeight: '90vh', display: 'flex', alignItems: 'center', bgcolor: '#000' }}>
+      <Container maxWidth="xs">
+        <Paper 
+          elevation={0} 
+          sx={{ 
+            p: 4, 
+            bgcolor: '#0a0a0a', 
+            borderRadius: 0, 
+            border: '1px solid #1a1a1a',
+            '&:hover': { borderColor: '#d32f2f' },
+            transition: '0.3s'
+          }}
+        >
+          <Typography variant="h4" align="center" sx={{ fontWeight: 900, mb: 4, textTransform: 'uppercase', color: 'white' }}>
+            JOIN THE <span style={{ color: '#d32f2f' }}>GYM</span>
+          </Typography>
+          
+          <Box component="form" onSubmit={handleSubmit} noValidate>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              label="Ονοματεπώνυμο"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              autoFocus
+              variant="outlined"
+              sx={{ 
+                mb: 2,
+                '& .MuiOutlinedInput-root': { borderRadius: 0 },
+                '& .MuiInputLabel-root': { color: '#666' },
+              }}
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              label="Email Address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              variant="outlined"
+              sx={{ 
+                mb: 2,
+                '& .MuiOutlinedInput-root': { borderRadius: 0 },
+                '& .MuiInputLabel-root': { color: '#666' },
+              }}
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              label="Password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              sx={{ 
+                mb: 4,
+                '& .MuiOutlinedInput-root': { borderRadius: 0 },
+                '& .MuiInputLabel-root': { color: '#666' },
+              }}
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              size="large"
+              sx={{ 
+                py: 2, 
+                fontWeight: 900, 
+                borderRadius: 0, 
+                bgcolor: '#d32f2f',
+                '&:hover': { bgcolor: '#ff1744' }
+              }}
+            >
+              ΕΓΓΡΑΦΗ
+            </Button>
 
-        {myBookings.length === 0 ? (
-          <Paper sx={{ p: 4, bgcolor: '#111', border: '1px dashed #333', textAlign: 'center', borderRadius: 0 }}>
-            <Typography sx={{ color: '#555', fontWeight: 700 }}>ΔΕΝ ΕΧΕΙΣ ΠΡΟΓΡΑΜΜΑΤΙΣΜΕΝΑ ΜΑΘΗΜΑΤΑ</Typography>
-          </Paper>
-        ) : (
-          <Stack spacing={2}>
-            {myBookings.map((booking) => {
-              const cancellable = isCancellable(booking.day, booking.time);
-              const isProcessing = processingId === booking.slot_id;
-
-              return (
-                <Paper key={booking.slot_id} sx={{ 
-                  p: 3, bgcolor: '#111', border: '1px solid #1a1a1a', 
-                  display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-                  borderRadius: 0, transition: '0.3s',
-                  '&:hover': { borderColor: cancellable ? '#d32f2f' : '#333' }
-                }}>
-                  <Box>
-                    <Typography variant="h6" sx={{ color: '#d32f2f', fontWeight: 900, textTransform: 'uppercase', lineHeight: 1 }}>
-                      {booking.day}
-                    </Typography>
-                    <Typography variant="h4" sx={{ color: 'white', fontWeight: 900 }}>
-                      {booking.time.substring(0, 5)}
-                    </Typography>
-                  </Box>
-                  
-                  <Button 
-                    variant="contained" 
-                    disabled={!cancellable || isProcessing}
-                    startIcon={cancellable ? <CancelScheduleSend /> : <LockClock />}
-                    onClick={() => handleCancel(booking.slot_id)}
-                    sx={{ 
-                      borderRadius: '0px', fontWeight: 900, px: 3,
-                      bgcolor: cancellable ? '#d32f2f' : '#222',
-                      color: cancellable ? '#fff' : '#555',
-                      '&:hover': { bgcolor: '#ff1744' },
-                      '&.Mui-disabled': { bgcolor: '#1a1a1a', color: '#444' }
-                    }}
-                  >
-                    {isProcessing ? <CircularProgress size={20} color="inherit" /> : cancellable ? "CANCEL" : "LOCKED"}
-                  </Button>
-                </Paper>
-              );
-            })}
-          </Stack>
-        )}
+            <Box sx={{ mt: 4, textAlign: 'center' }}>
+              <Link 
+                component={RouterLink} 
+                to="/login" 
+                sx={{ 
+                  color: '#555', 
+                  textDecoration: 'none', 
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                  fontSize: '0.75rem',
+                  letterSpacing: 1,
+                  '&:hover': { color: '#d32f2f' } 
+                }}
+              >
+                {"Έχεις ήδη λογαριασμό; Σύνδεση"}
+              </Link>
+            </Box>
+          </Box>
+        </Paper>
       </Container>
     </Box>
   );
 };
 
-export default MyBookings;
+export default Register;
