@@ -20,7 +20,31 @@ const Booking = () => {
   
   const { tokens: userTokens, refreshTokens, loading: authLoading } = useAuth();
 
-  // Helper για τα Alerts
+  // Helper function για το κλείδωμα των παλιών slots
+  const isSlotExpired = (dayName: string, slotTime: string) => {
+    const daysMap: { [key: string]: number } = {
+      'ΚΥΡΙΑΚΗ': 0, 'ΔΕΥΤΕΡΑ': 1, 'ΤΡΙΤΗ': 2, 'ΤΕΤΑΡΤΗ': 3, 'ΠΕΜΠΤΗ': 4, 'ΠΑΡΑΣΚΕΥΗ': 5, 'ΣΑΒΒΑΤΟ': 6
+    };
+
+    const now = new Date();
+    const currentDayIndex = now.getDay(); // 0 (Κυριακή) έως 6 (Σάββατο)
+    const slotDayIndex = daysMap[dayName.toUpperCase()];
+
+    // Αν η ημέρα έχει περάσει (και δεν είναι Κυριακή - μέρα refresh)
+    if (slotDayIndex < currentDayIndex && currentDayIndex !== 0) return true;
+
+    // Αν είναι η ίδια μέρα, ελέγχουμε την ώρα
+    if (slotDayIndex === currentDayIndex) {
+      const [hours, minutes] = slotTime.split(':').map(Number);
+      const slotDateTime = new Date();
+      slotDateTime.setHours(hours, minutes, 0, 0);
+      
+      return now >= slotDateTime; 
+    }
+
+    return false;
+  };
+
   const showBoxAlert = (title: string, text: string, icon: 'success' | 'error') => {
     Swal.fire({
       title: `<span style="color: #fff; font-weight: 900; text-transform: uppercase;">${title}</span>`,
@@ -65,7 +89,6 @@ const Booking = () => {
     try {
       setProcessingId(slotId);
       const response = await api.post(`/bookings/reserve/${slotId}`);
-      
       showBoxAlert("TARGET LOCKED", response.data.message || "Η κράτηση ολοκληρώθηκε!", "success");
       await fetchData();
     } catch (err: any) {
@@ -88,7 +111,6 @@ const Booking = () => {
   return (
     <Box sx={{ bgcolor: '#0a0a0a', minHeight: '100vh', py: 8 }}>
       <Container maxWidth="lg">
-        {/* Header Section */}
         <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, justifyContent: 'space-between', alignItems: 'center', mb: 6, gap: 3 }}>
           <Box>
             <Typography variant="h2" sx={{ fontWeight: 900, textTransform: 'uppercase', color: 'white', fontSize: { xs: '2.2rem', md: '3.5rem' }, lineHeight: 1 }}>
@@ -104,14 +126,9 @@ const Booking = () => {
           </Paper>
         </Box>
 
-        {/* Schedule Grid */}
         <Box sx={{ 
           display: 'grid', 
-          gridTemplateColumns: { 
-            xs: '1fr', 
-            sm: '1fr 1fr', 
-            md: 'repeat(5, 1fr)' 
-          }, 
+          gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: 'repeat(5, 1fr)' }, 
           gap: 2 
         }}>
           {days.map((day) => {
@@ -125,39 +142,42 @@ const Booking = () => {
                   daySlots.map((slot) => {
                     const isFull = slot.current_capacity <= 0;
                     const isProcessing = processingId === slot.id;
+                    const isExpired = isSlotExpired(slot.day, slot.time);
+
                     return (
                       <Paper 
                         key={slot.id} 
                         elevation={0}
                         sx={{ 
-                          p: 2.5, 
-                          mb: 2, 
-                          bgcolor: isFull ? '#050505' : '#111', 
-                          border: '1px solid #1a1a1a', 
-                          textAlign: 'center', 
-                          borderRadius: '0px',
+                          p: 2.5, mb: 2, 
+                          bgcolor: (isFull || isExpired) ? '#050505' : '#111', 
+                          border: '1px solid #1a1a1a', textAlign: 'center', borderRadius: '0px',
+                          opacity: isExpired ? 0.5 : 1,
                           transition: '0.2s',
-                          '&:hover': { borderColor: isFull ? '#1a1a1a' : '#d32f2f' }
+                          '&:hover': { borderColor: (isFull || isExpired) ? '#1a1a1a' : '#d32f2f' }
                         }}
                       >
-                        <Typography variant="h6" sx={{ fontWeight: 900, color: 'white' }}>{slot.time.substring(0, 5)}</Typography>
-                        <Typography variant="body2" sx={{ mb: 2, color: isFull ? '#333' : '#00e676', fontWeight: 900, fontSize: '0.7rem', textTransform: 'uppercase' }}>
-                          {isFull ? "OUT OF SPACE" : `${slot.current_capacity} SPOTS LEFT`}
+                        <Typography variant="h6" sx={{ fontWeight: 900, color: isExpired ? '#444' : 'white' }}>
+                            {slot.time.substring(0, 5)}
+                        </Typography>
+                        <Typography variant="body2" sx={{ mb: 2, color: isExpired ? '#444' : (isFull ? '#333' : '#00e676'), fontWeight: 900, fontSize: '0.7rem', textTransform: 'uppercase' }}>
+                          {isExpired ? "LOCKED" : isFull ? "OUT OF SPACE" : `${slot.current_capacity} SPOTS LEFT`}
                         </Typography>
                         <Button 
                           variant="contained" 
-                          disabled={isFull || (userTokens !== undefined && userTokens <= 0) || isProcessing}
+                          disabled={isFull || isExpired || (userTokens !== undefined && userTokens <= 0) || isProcessing}
                           onClick={() => handleBooking(slot.id)}
                           fullWidth
                           sx={{ 
-                            borderRadius: '0', 
-                            fontWeight: 900, 
-                            bgcolor: isFull ? '#1a1a1a' : '#d32f2f', 
+                            borderRadius: '0', fontWeight: 900, 
+                            bgcolor: (isFull || isExpired) ? '#0a0a0a' : '#d32f2f', 
                             '&:hover': { bgcolor: '#ff1744' },
-                            '&.Mui-disabled': { bgcolor: '#0a0a0a', color: '#333' }
+                            '&.Mui-disabled': { bgcolor: '#0a0a0a', color: '#333', border: '1px solid #1a1a1a' }
                           }}
                         >
-                          {isProcessing ? <CircularProgress size={20} color="inherit" /> : isFull ? "FULL" : "BOOK"}
+                          {isProcessing ? <CircularProgress size={20} color="inherit" /> : 
+                           isExpired ? "CLOSED" : 
+                           isFull ? "FULL" : "BOOK"}
                         </Button>
                       </Paper>
                     );
