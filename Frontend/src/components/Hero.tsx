@@ -46,7 +46,7 @@ const Hero = () => {
                 COMBO <span style={{ color: '#d32f2f' }}>GYM</span>
               </Typography>
               <Typography variant="h5" sx={{ color: '#eee', mb: 3, fontWeight: 800, fontSize: { xs: '1.1rem', md: '1.6rem' }, textTransform: 'uppercase' }}>
-                Προπονηση σε όλα τα επιπεδα & κάθε στοχο.
+                Προπονηση σε ολα τα επιπεδα & καθε στοχο.
               </Typography>
               <Typography variant="body1" sx={{ color: '#888', mb: 2, fontSize: { xs: '0.95rem', md: '1.05rem' }, maxWidth: '600px', lineHeight: 1.7 }}>
                 Με <strong style={{ color: '#ccc' }}>16 χρόνια εμπειρίας</strong> στην πυγμαχία και προϋπηρεσία σε κορυφαία γυμναστήρια, ο Αλέξανδρος ίδρυσε τον δικό του χώρο τον Μάρτιο του 2016.
