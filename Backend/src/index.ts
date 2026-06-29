@@ -23,7 +23,7 @@ const app = express();
 
 // 1. Global Middlewares
 app.use(cors({
-  origin: 'https://combo-gym-three.vercel.app',
+  origin: ['https://combo-gym-three.vercel.app', 'http://localhost:5173'],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 })); // Για να μπορεί το React να μιλάει με το Backend

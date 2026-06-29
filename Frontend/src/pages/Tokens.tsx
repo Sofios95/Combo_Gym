@@ -5,9 +5,18 @@ import {
 } from '@mui/material';
 import Swal from 'sweetalert2'; // Εισαγωγή του SweetAlert2
 import api from '../api/axiosConfig';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/useAuth';
 
-const tokenPackages = [
+interface TokenPackage {
+  title: string;
+  tokens: number;
+  price: number;
+  description: string;
+  expires: string;
+  featured?: boolean;
+}
+
+const tokenPackages: TokenPackage[] = [
   { title: 'DROP IN', tokens: 1, price: 20, description: 'Για μια γρήγορη δόση αδρεναλίνης. Μπες, δώσε τα πάντα στο σάκο και φύγε γεμάτος.', expires: '30 ΗΜΕΡΕΣ' },
   { title: 'NEW MEMBER TRIAL', tokens: 2, price: 20, description: 'Η πρώτη σου επαφή με το ρινγκ. Δύο sessions για να καταλάβεις τι σημαίνει Combo Gym.', expires: '7 ΗΜΕΡΕΣ' },
   { title: '4 SESSIONS PACK', tokens: 4, price: 60, description: 'Βελτίωσε την τεχνική σου και χτίσε αντοχή. Ιδανικό για boxing και conditioning.', expires: '30 ΗΜΕΡΕΣ' },
@@ -15,7 +24,7 @@ const tokenPackages = [
 ];
 
 const Tokens = () => {
-  const { refreshTokens } = useAuth();
+  const { tokens: userTokens, refreshTokens, loading: authLoading } = useAuth();
   const [isProcessing, setIsProcessing] = useState(false);
 
   // Custom Alert Function (το ορίζουμε εδώ μέσα για ευκολία)
@@ -35,7 +44,7 @@ const Tokens = () => {
     });
   };
 
-  const handlePurchase = async (pkg: any) => {
+  const handlePurchase = async (pkg: TokenPackage) => {
     // Custom Confirm Alert αντί για window.confirm
     const result = await Swal.fire({
       title: `<span style="color: #fff; font-weight: 900;">CONFIRM PURCHASE</span>`,
@@ -72,13 +81,21 @@ const Tokens = () => {
       // Επιτυχία!
       showBoxAlert("SUCCESS", res.data.message || "Τα tokens προστέθηκαν!", "success");
 
-    } catch (err: any) {
-      // Σφάλμα!
-      showBoxAlert("FAILURE", err.response?.data?.message || "Η συναλλαγή απέτυχε.", "error");
+    } catch (err: unknown) {
+      const errorMessage = (err as { response?: { data?: { message?: string } } }).response?.data?.message || "Η συναλλαγή απέτυχε.";
+      showBoxAlert("FAILURE", errorMessage, "error");
     } finally {
       setIsProcessing(false);
     }
   };
+
+  if (authLoading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', bgcolor: '#000' }}>
+        <CircularProgress color="error" thickness={5} />
+      </Box>
+    );
+  }
 
   return (
     <Box sx={{ bgcolor: '#000', pt: { xs: 8, md: 12 }, pb: 10, width: '100%', overflow: 'hidden' }}>
@@ -93,9 +110,18 @@ const Tokens = () => {
       </Backdrop>
 
       <Container maxWidth="lg">
-        <Typography variant="h2" align="center" sx={{ fontWeight: 900, mb: 6, color: '#fff', fontSize: { xs: '2.2rem', md: '4rem' } }}>
+        <Typography variant="h2" align="center" sx={{ fontWeight: 900, mb: 2, color: '#fff', fontSize: { xs: '2.2rem', md: '4rem' } }}>
           COMBO <span style={{ color: '#d32f2f' }}>PLANS</span>
         </Typography>
+
+        <Paper elevation={0} sx={{ mb: 4, p: 3, bgcolor: '#000', border: '2px solid #d32f2f', borderRadius: 0, textAlign: 'center', maxWidth: 260, mx: 'auto' }}>
+          <Typography variant="caption" sx={{ fontWeight: 900, color: '#d32f2f', textTransform: 'uppercase', letterSpacing: 2 }}>
+            Current Balance
+          </Typography>
+          <Typography variant="h3" sx={{ color: '#fff', fontWeight: 900, mt: 1 }}>
+            {userTokens}
+          </Typography>
+        </Paper>
 
         <Box sx={{ 
           display: 'flex', 
@@ -104,8 +130,8 @@ const Tokens = () => {
           gap: 3,
           width: '100%'
         }}>
-          {tokenPackages.map((pkg, index) => (
-            <Box key={index} sx={{ 
+          {tokenPackages.map((pkg) => (
+            <Box key={pkg.title} sx={{ 
               width: { xs: '100%', sm: 'calc(50% - 24px)', md: 'calc(25% - 24px)' },
               display: 'flex' 
             }}>

@@ -15,7 +15,7 @@ import './index.css';
 function App() {
   return (
     <>
-      {/* 🛡️ Η "Ασπίδα" κατά του οριζόντιου scroll */}
+      {/* 1. Global CSS Overrides: Ensures the app looks consistent across all browsers */}
       <GlobalStyles
         styles={{
           "html, body": {
@@ -23,31 +23,33 @@ function App() {
             padding: 0,
             width: "100%",
             maxWidth: "100vw",
-            overflowX: "hidden", // Κλειδώνει το πλάτος
-            backgroundColor: "#000000", // Σιγουρεύουμε το μαύρο φόντο παντού
+            overflowX: "hidden", // Prevents annoying horizontal scrolling
+            backgroundColor: "#000000", 
           },
           "#root": {
             width: "100%",
             overflowX: "hidden",
           },
           "*": {
-            boxSizing: "border-box", // Σωστός υπολογισμός paddings
+            boxSizing: "border-box", // Essential for correct width/padding calculations
           },
         }}
       />
 
+      {/* 2. Main Wrapper: Layout container using Flexbox */}
       <Box
         sx={{
           display: "flex",
           flexDirection: "column",
-          minHeight: "100vh",
+          minHeight: "100vh", // Makes the app take at least the full height of the screen
           width: "100%",
-          overflowX: "hidden", // Διπλή ασφάλεια
+          overflowX: "hidden",
           position: "relative",
         }}
       >
         <Navbar />
 
+        {/* 3. Main Content Area: 'flexGrow: 1' pushes the footer to the bottom */}
         <Box
           component="main"
           sx={{
@@ -57,6 +59,7 @@ function App() {
             flexDirection: "column",
           }}
         >
+          {/* 4. Routing System: Matches the URL path to a specific Page Component */}
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/book" element={<Booking />} />

@@ -7,7 +7,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
 import HistoryIcon from '@mui/icons-material/History';
 import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/useAuth';
 
 const Navbar = () => {
   const theme = useTheme();

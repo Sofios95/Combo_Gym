@@ -3,7 +3,7 @@ import { Box, Container, Paper, Typography, TextField, Button, Link } from '@mui
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2'; 
 import api from '../api/axiosConfig'; 
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/useAuth';
 
 const Login = () => {
   const [email, setEmail] = useState('');

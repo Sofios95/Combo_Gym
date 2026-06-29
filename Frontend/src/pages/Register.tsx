@@ -39,8 +39,8 @@ const Register = () => {
       showBoxAlert("WELCOME TO THE TEAM", response.data.message || "Η εγγραφή ολοκληρώθηκε!", "success");
       navigate('/login'); 
 
-    } catch (err: any) {
-      const errorMsg = err.response?.data?.message || "Η εγγραφή απέτυχε";
+    } catch (err:unknown) {
+      const errorMsg = (err as { response?: { data?: { message?: string } } }).response?.data?.message || "Η εγγραφή απέτυχε";
       showBoxAlert("REGISTRATION ERROR", errorMsg, "error");
     }
   };

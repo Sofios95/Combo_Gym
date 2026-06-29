@@ -3,7 +3,7 @@ import { Box, Container, Typography, Paper, Button, Stack, CircularProgress } fr
 import { CancelScheduleSend, EventBusy, LockClock } from '@mui/icons-material'; 
 import Swal from 'sweetalert2'; // 🔥 Εισαγωγή SweetAlert2
 import api from '../api/axiosConfig';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/useAuth';
 
 interface Booking {
   slot_id: number;
@@ -99,8 +99,8 @@ const MyBookings = () => {
       await refreshTokens();
       
       showBoxAlert("SUCCESS", "Η θέση ελευθερώθηκε και το token επιστράφηκε!", "success");
-    } catch (err: any) {
-      const msg = err.response?.data?.message || "Αποτυχία ακύρωσης";
+    } catch (err: unknown) {
+      const msg = (err as { response?: { data?: { message?: string } } }).response?.data?.message || "Αποτυχία ακύρωσης";
       showBoxAlert("ERROR", msg, "error");
       fetchMyBookings();
     } finally {

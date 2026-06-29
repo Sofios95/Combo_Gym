@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Box, Container, Typography, Paper, Button, CircularProgress } from '@mui/material';
 import Swal from 'sweetalert2'; 
 import api from '../api/axiosConfig';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/useAuth';
 
 interface Slot {
   id: number;
@@ -91,8 +91,8 @@ const Booking = () => {
       const response = await api.post(`/bookings/reserve/${slotId}`);
       showBoxAlert("TARGET LOCKED", response.data.message || "Η κράτηση ολοκληρώθηκε!", "success");
       await fetchData();
-    } catch (err: any) {
-      const errorMsg = err.response?.data?.message || "Η κράτηση απέτυχε.";
+    } catch (err:unknown) {
+      const errorMsg = (err as { response?: { data?: { message?: string } } }).response?.data?.message || "Η κράτηση απέτυχε.";
       showBoxAlert("MISSION FAILED", errorMsg, "error");
       await fetchData();
     } finally {
