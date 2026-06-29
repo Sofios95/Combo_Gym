@@ -1,8 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
-// Χρήση του Secret από το .env ή default για το local development
-const JWT_SECRET = process.env.JWT_SECRET || 'boxer_secret_key_2026';
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+  throw new Error('JWT_SECRET is not defined. Set it in your environment or .env file.');
+}
 
 /**
  * Middleware για την προστασία των routes. 

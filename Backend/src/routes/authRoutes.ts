@@ -4,7 +4,10 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 const router = Router();
-const JWT_SECRET = process.env.JWT_SECRET || 'boxer_secret_key_2026';
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+  throw new Error('JWT_SECRET is not defined. Set it in your environment or .env file.');
+}
 
 // 1. REGISTER: Δημιουργία νέου αθλητή
 router.post("/register", async (req, res) => {
@@ -41,7 +44,11 @@ router.post("/login", async (req, res) => {
     if (!isMatch) return res.status(401).json({ message: "Λάθος κωδικός!" });
 
     // Δημιουργία Token
-    const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: '1d' });
+    const token = jwt.sign(
+      { userId: user.id, email: user.email, role: user.role },
+      JWT_SECRET,
+      { expiresIn: '1d' }
+    );
 
     res.json({ token, message: "🔥 Welcome back, Champ!" });
   } catch (err) {
