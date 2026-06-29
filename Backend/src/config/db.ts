@@ -1,19 +1,30 @@
 import { Pool } from "pg";
 import dotenv from "dotenv";
 
-// Φορτώνουμε τις μεταβλητές από το .env (αν δεν έχουν φορτωθεί ήδη στο app.ts)
+// Φορτώνουμε τις μεταβλητές περιβάλλοντος από το .env
 dotenv.config();
 
+const isProduction = process.env.NODE_ENV === "production";
+
+// Ρύθμιση του Pool ανάλογα με το περιβάλλον (Local ή Railway Production)
 const pool = new Pool({
-  // Αν υπάρχει DATABASE_URL (συνηθισμένο σε Docker/Heroku), το χρησιμοποιεί.
-  // Αλλιώς χτίζει το config από τα επιμέρους πεδία.
-  host: process.env.DB_HOST || "db",
-  user: process.env.DB_USER || "postgres",
-  password: process.env.DB_PASSWORD || "yourpassword",
-  database: process.env.DB_NAME || "combo_gym",
-  port: parseInt(process.env.DB_PORT || "5432"),
+  // 1. Αν υπάρχει έτοιμο DATABASE_URL (συνηθισμένο στο Railway), το χρησιμοποιεί απευθείας
+  connectionString: process.env.DATABASE_URL,
+
+  // 2. Αν ΔΕΝ υπάρχει URL, χτίζει τη σύνδεση από τα επιμέρους πεδία (για το localhost σου)
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  port: process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 5432,
+
+  // 3. SSL Configuration: Απαραίτητο για να σε αφήσει το Railway να συνδεθείς live στην PostgreSQL
+  ssl: isProduction ? { rejectUnauthorized: false } : false,
 });
 
+/**
+ * Συναρτήση για τον έλεγχο της σύνδεσης κατά την εκκίνηση του server.
+ */
 export const connectDB = async () => {
   try {
     // Κάνουμε ένα test query για να βεβαιωθούμε ότι η σύνδεση όντως λειτουργεί
@@ -23,9 +34,9 @@ export const connectDB = async () => {
   } catch (err) {
     console.error("❌ Database connection error:", err);
 
-    // Σημαντικό: Δείχνουμε αν το πρόβλημα είναι οι κενές μεταβλητές
-    if (!process.env.DB_PASSWORD) {
-      console.warn("⚠️ Warning: DB_PASSWORD is not defined in .env");
+    // Έλεγχος ασφαλείας: Αν λείπουν τα credentials, βγάζουμε ξεκάθαρη προειδοποίηση
+    if (!process.env.DATABASE_URL && !process.env.DB_PASSWORD) {
+      console.error("⚠️ FATAL ERROR: Database credentials (DB_PASSWORD or DATABASE_URL) are missing in .env!");
     }
 
     process.exit(1);
