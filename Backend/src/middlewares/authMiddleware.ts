@@ -3,40 +3,51 @@ import jwt from 'jsonwebtoken';
 
 const JWT_SECRET = process.env.JWT_SECRET;
 if (!JWT_SECRET) {
-  throw new Error('JWT_SECRET is not defined. Set it in your environment or .env file.');
+  throw new Error('JWT_SECRET is not defined. Set it in your environment.');
+}
+
+// 1. Define the interface for the decrypted JWT payload
+interface UserPayload {
+  userId: number;
+  email: string;
+  role: string;
+}
+
+// 2. Extend the Express Request interface to include our custom user object cleanly
+interface AuthenticatedRequest extends Request {
+  user?: UserPayload;
 }
 
 /**
- * Middleware για την προστασία των routes. 
- * Ελέγχει αν το JWT token είναι έγκυρο.
+ * Middleware to protect secure routes.
+ * Verifies the incoming JWT token in the Authorization header.
  */
-export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
-  // 1. Λήψη του Header (Authorization: Bearer <token>)
+export const authMiddleware = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+  // Extract the Authorization header (Expected format: Bearer <token>)
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return res.status(401).json({ 
-      message: '⛔ Μη εξουσιοδοτημένη πρόσβαση. Λείπει το token.' 
+      message: '⛔ Unauthorized access. Missing or malformed token.' 
     });
   }
 
-  // 2. Απομόνωση του token (αφαιρούμε το "Bearer ")
+  // Isolate the pure token string
   const token = authHeader.split(' ')[1];
 
   try {
-    // 3. Επαλήθευση και αποκωδικοποίηση
-    const decoded = jwt.verify(token, JWT_SECRET) as { userId: number; email: string; role: string };
+    // Verify the token integrity using our secret key
+    const decoded = jwt.verify(token, JWT_SECRET) as UserPayload;
     
-    // 4. Προσθήκη των στοιχείων του χρήστη στο request object
-    // Χρησιμοποιούμε (req as any) για να μην παραπονιέται η TS που το 'user' δεν υπάρχει στο default Request type
-    (req as any).user = decoded;
+    // Attach the decoded user data to the request object safely without using 'as any'
+    req.user = decoded;
     
-    // 5. Συνέχεια στον επόμενο Controller
+    // Pass control to the next controller/middleware
     next();
   } catch (error) {
-    // Αν το token έχει λήξει ή είναι πειραγμένο
+    // Triggered if the token is expired, altered, or fake
     return res.status(401).json({ 
-      message: '⚠️ Το token δεν είναι έγκυρο ή έχει λήξει.' 
+      message: '⚠️ Invalid or expired token.' 
     });
   }
 };

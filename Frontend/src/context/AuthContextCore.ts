@@ -15,4 +15,5 @@ export interface AuthContextType {
   refreshTokens: () => Promise<void>;
 }
 
+// Initialize context with undefined to enforce proper provider wrapping
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);

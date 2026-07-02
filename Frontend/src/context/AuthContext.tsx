@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../api/axiosConfig';
-import { jwtDecode } from 'jwt-decode'; // Χρειάζεται εγκατάσταση
+import { jwtDecode } from 'jwt-decode';
 import { AuthContext } from './AuthContextCore';
 import type { User } from './AuthContextCore';
 
@@ -16,15 +16,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [tokens, setTokens] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
 
+  // Fetches the subscriber's token balance from the backend
   const refreshTokens = async () => {
     try {
       const res = await api.get('/tokens/balance');
       setTokens(res.data.tokens);
     } catch (error) {
-      console.error("Σφάλμα κατά την ανανέωση των tokens:", error);
+      console.error("Error refreshing token balance:", error);
     }
   };
 
+  // Handles post-login state and token assignment
   const login = (token: string) => {
     localStorage.setItem('token', token);
     const decoded: JwtPayload = jwtDecode(token);
@@ -32,21 +34,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     refreshTokens();
   };
 
+  // Clears storage and session states
   const logout = () => {
     localStorage.removeItem('token');
     setUser(null);
     setTokens(0);
-    window.location.href = '/login';
+    // REMOVED window.location.href to let React Router handle routing seamlessly
   };
 
+  // Auth checking loop on app load / refresh
   useEffect(() => {
     const checkAuth = async () => {
       const token = localStorage.getItem('token');
       if (token) {
         try {
           const decoded: JwtPayload = jwtDecode(token);
-          // Ελέγχουμε αν το token έχει λήξει
           const currentTime = Date.now() / 1000;
+
+          // If the token has expired, log the user out
           if (decoded.exp < currentTime) {
             logout();
           } else {
@@ -68,4 +73,3 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     </AuthContext.Provider>
   );
 };
-
